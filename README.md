@@ -9,15 +9,14 @@ A CLI for bootstrapping and keeping project config up-to-date.
 
 ## Table of contents
 
-- [Table of Contents](#table-of-contents)
 - [What is this for?](#what-is-this-for)
 - [What's the plan?](#whats-the-plan)
   - [Principles](#principles)
-  - [Ideas](#ideas)
-    - [Plugins](#plugins)
-    - [Generators](#generators)
-    - [Using the cli](#using-the-cli)
-    - [Versioned plugins](#versioned-plugins)
+- [Ideas](#ideas)
+  - [Plugins](#plugins)
+  - [Generators](#generators)
+  - [Using the cli](#using-the-cli)
+  - [Versioned plugins](#versioned-plugins)
 
 <!-- toc-tail -->
 
@@ -44,9 +43,9 @@ So I don't have to keep updating the some config files over and over again.
 - It should be compose-able through plugins or generators
 - It should allow project upgrades to avoid updating project configs over and over again.
 
-### Ideas
+## Ideas
 
-#### Plugins
+### Plugins
 
 Logically grouped sets of virtual fs changes
 
@@ -139,7 +138,7 @@ class PrettierPlugin extends Plugin {
 }
 ```
 
-#### Generators
+### Generators
 
 Presets for a specific project setup
 
@@ -196,7 +195,7 @@ There should be file to remember what was generated, maybe a **puggle.json** fil
 }
 ```
 
-#### Using the cli
+### Using the cli
 
 ```bash
 npm i -g puggle puggle-generator-robbj-nodejs
@@ -212,7 +211,7 @@ puggle run
 > robb-j:vue
 ```
 
-#### Versioned plugins
+### Versioned plugins
 
 Plugins could be responsible for their versions, then puggle can handle the rest.
 
