@@ -30,18 +30,18 @@ Press ^C at any time to quit.
 `;
 (async () => {
     try {
-        // 
+        //
         // Say hello to the nice user
-        // 
+        //
         console.log(message.trim());
         const promptOpts = {
             onCancel: () => process.exit(1)
         };
         let path = process.argv[2] || '.';
-        // 
+        //
         // Confirm they really want to use the current directory
         // Give the user the option to change it
-        // 
+        //
         if (path === '.') {
             let check = await prompts_1.default({
                 type: 'confirm',
@@ -59,10 +59,10 @@ Press ^C at any time to quit.
             }
         }
         const initialName = lastDirectory(path === '.' ? process.cwd() : path);
-        // 
+        //
         // Ask for the project's name, repo & author
         // With some robb-j defaults (for now)
-        // 
+        //
         let { name, repository, author } = await prompts_1.default([
             {
                 type: 'text',
@@ -84,13 +84,11 @@ Press ^C at any time to quit.
             }
         ], promptOpts);
         const packageConf = { name, repository, author };
-        // 
+        //
         // Create our virtual file system, the project to be created
-        // 
+        //
         const tree = new VNode_1.VRoot([
-            new VNode_1.VDir('src', [
-                new VNode_1.VFile('index.js', file.indexJs('Geoff'))
-            ]),
+            new VNode_1.VDir('src', [new VNode_1.VFile('index.js', file.indexJs('Geoff'))]),
             new VNode_1.VFile('.dockerignore', file.dockerignore()),
             new VNode_1.VFile('.editorconfig', file.editorconfig()),
             new VNode_1.VFile('.eslintrc.yml', file.eslintYml()),
@@ -99,17 +97,17 @@ Press ^C at any time to quit.
             new VNode_1.VFile('Dockerfile', file.dockerfile()),
             new VNode_1.VPackageJson(packageConf, file.packageJson()),
             new VNode_1.VFile('README.md', file.readme()),
-            new VNode_1.VFile('REGISTRY', file.registry()),
+            new VNode_1.VFile('REGISTRY', file.registry())
         ]);
-        // 
+        //
         // Make the virtual file system into a real one
         //
         await tree.serialize(path_1.join(process.cwd(), path));
     }
     catch (error) {
-        // 
+        //
         // Catch and log any errors then exit the program
-        // 
+        //
         console.log(error);
         process.exit(1);
     }

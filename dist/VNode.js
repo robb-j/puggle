@@ -18,10 +18,10 @@ var VNodeType;
     VNodeType[VNodeType["file"] = 0] = "file";
     VNodeType[VNodeType["directory"] = 1] = "directory";
 })(VNodeType = exports.VNodeType || (exports.VNodeType = {}));
-// 
+//
 // The base class of virual filesystem nodes, doesn't do very much
 // Other things extend this and add functionality
-// 
+//
 class VNode {
     constructor(name) {
         this.name = exports.removeSurroundingSlashes(name);
@@ -30,12 +30,12 @@ class VNode {
     async serialize(path) { }
 }
 exports.VNode = VNode;
-// 
+//
 // A virtual file
 //
 // Ideas:
 // - The contents could be set based on the result of some template
-// 
+//
 class VFile extends VNode {
     constructor(name, contents = '') {
         super(name);
@@ -46,9 +46,9 @@ class VFile extends VNode {
     }
 }
 exports.VFile = VFile;
-// 
+//
 // A virtual directory to hold more virtual nodes
-// 
+//
 class VDir extends VNode {
     constructor(name, children = new Array()) {
         super(name);
@@ -87,27 +87,27 @@ class VDir extends VNode {
 exports.VDir = VDir;
 //
 // A special virtual directory to be at the root of the virual file system
-// 
+//
 class VRoot extends VDir {
     constructor(children = new Array()) {
         super('.', children);
     }
 }
 exports.VRoot = VRoot;
-// 
+//
 // The supported types of config files
-// 
+//
 var VConfigType;
 (function (VConfigType) {
     VConfigType[VConfigType["json"] = 0] = "json";
     VConfigType[VConfigType["yaml"] = 1] = "yaml";
 })(VConfigType = exports.VConfigType || (exports.VConfigType = {}));
-// 
+//
 // A virtual config file, a file with some potentially updatable data
-// 
+//
 // Ideas:
 // - Provide merging / updating so plugins can alter configs if they want
-// 
+//
 class VConfig extends VFile {
     constructor(name, type, contents) {
         super(name);
@@ -134,13 +134,13 @@ class VConfig extends VFile {
     }
 }
 exports.VConfig = VConfig;
-// 
+//
 // A virtual package.json
 // - Attempts to merge with an existing package.json (wip)
-// 
+//
 // Ideas:
 // - Some way of dynamically declaring (dev|prod|optional) dependancies
-// 
+//
 class VPackageJson extends VConfig {
     constructor(config, contents = {}) {
         super('package.json', VConfigType.json, contents);
