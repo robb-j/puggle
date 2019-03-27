@@ -7,11 +7,17 @@ A CLI for bootstrapping and keeping project config up-to-date.
 
 <!-- toc-head -->
 
-## Table of Contents
+## Table of contents
 
-- [What is this for?](#what-is-this-for%3F)
-- [What's the plan?](#what's-the-plan%3F)
+- [Table of Contents](#table-of-contents)
+- [What is this for?](#what-is-this-for)
+- [What's the plan?](#whats-the-plan)
   - [Principles](#principles)
+  - [Ideas](#ideas)
+    - [Plugins](#plugins)
+    - [Generators](#generators)
+    - [Using the cli](#using-the-cli)
+    - [Versioned plugins](#versioned-plugins)
 
 <!-- toc-tail -->
 
