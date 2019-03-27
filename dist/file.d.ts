@@ -1,0 +1,10 @@
+export declare const indexJs: (name?: string) => string;
+export declare const dockerignore: () => string;
+export declare const editorconfig: () => string;
+export declare const eslintYml: () => string;
+export declare const gitignore: () => string;
+export declare const prettierrcYml: () => string;
+export declare const dockerfile: () => string;
+export declare const readme: (name?: string) => string;
+export declare const packageJson: () => any;
+export declare const registry: () => string;

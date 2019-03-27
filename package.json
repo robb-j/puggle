@@ -1,0 +1,69 @@
+{
+  "name": "puggle",
+  "version": "0.0.0",
+  "description": "A CLI for bootstrapping and keeping project config up-to-date",
+  "main": "src/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "robb-j/puggle",
+  "author": "Rob Anderson (https://r0b.io)",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint": "npx tsc --noEmit",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "preversion": "npm test -s && npm run readme-toc && npm run build && git add dist && git add README.md",
+    "readme-toc": "md-toc -i",
+    "prettier": "prettier --write '**/*.{js,ts,tsx,json,css,md}'",
+    "start": "node dist/cli.js",
+    "dev": "node -r ts-node/register src/cli.ts"
+  },
+  "bin": {
+    "puggle": "./dist/cli.js"
+  },
+  "keywords": [],
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "prompts": "^2.0.4",
+    "yaml": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.6",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.set": "^4.3.6",
+    "@types/node": "^11.9.4",
+    "@types/prompts": "^1.2.0",
+    "@types/yaml": "^1.0.2",
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "lint-staged": "^8.1.4",
+    "nodemon": "^1.18.10",
+    "prettier": "1.16.4",
+    "ts-jest": "^23.10.5",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ]
+  }
+}
