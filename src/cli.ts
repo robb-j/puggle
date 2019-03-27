@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { join } from 'path'
 import { VFile, VDir, VRoot, VPackageJson } from './VNode'
 import * as file from './file'
