@@ -40,8 +40,14 @@ So I don't have to keep updating the some config files over and over again.
 
 ### Ideas
 
+#### Plugins
+
+Logically grouped sets of virtual fs changes
+
 ```ts
 class JestPlugin extends Plugin {
+  version = '0.2.0'
+
   async extendFileSystem(root: VNode) {
     let package = root.find('package.json')
 
@@ -80,6 +86,8 @@ coverage
 `
 
 class PrettierPlugin extends Plugin {
+  version = '0.1.0'
+
   async extendFileSystem(root: VNode) {
     let package = VPackageJson.getPackageOrFail(root)
 
@@ -124,6 +132,113 @@ class PrettierPlugin extends Plugin {
   }
 }
 ```
+
+#### Generators
+
+Presets for a specific project setup
+
+```ts
+// e.g. published on npm as: puggle-generator-robbj-nodejs
+class RobbJNodeJs extends Generator {
+  command = 'robb-j:node'
+
+  plugins = [
+    TypescriptPlugin,
+    NodeJsPlugin,
+    NodeJsDockerPlugin,
+    PrettierPlugin,
+    ESLintPlugin,
+    JestPlugin
+  ]
+
+  // Optional?
+  async run(path: string) {
+    // Ask for relevant info
+    let answers = await prompts(['...'])
+
+    // Configure plugins?
+    let plugins = await this.createPlugins()
+    plugins.prettier.useSemis = false
+
+    // Configure the virtual file system
+    let root = await this.createFileSystem(plugins)
+    root.addFile('/src', new VFile('cli.ts', `...`))
+
+    // Write the vfs to files
+    await root.serialize(path)
+  }
+}
+```
+
+There should be file to remember what was generated, maybe a **puggle.json** file?
+
+```bash
+{
+  "plugins": {
+    "nodejs": {
+      "version": "0.1.0",
+      "options": {
+        "name": "My fancy project",
+        "repo": "robb-j/nodejs"
+      }
+    },
+    "jest": {
+      "version": "0.2.0",
+      "options": {}
+    }
+  }
+}
+```
+
+#### Using the cli
+
+```bash
+npm i -g puggle puggle-generator-robbj-nodejs
+
+# maybe: user namespaced generators??
+npm i -g @robb_j/puggle-generator-nodejs
+
+puggle run
+* robb-j:node
+> robb-j:node-cli
+> robb-j:ts-node
+> robb-j:ts-node-cli
+> robb-j:vue
+```
+
+#### Versioned plugins
+
+Plugins could be responsible for their versions, then puggle can handle the rest.
+
+```ts
+class PrettierV1 extends Plugin {
+  version = '0.1.0'
+}
+
+class PrettierV2 extends Plugin {
+  version = '0.2.0'
+}
+
+export default new VersionedPlugin({
+  '0.1.0': PrettierV1,
+  '0.2.0': PrettierV2
+})
+```
+
+Is there much that can be done with this?
+Even if you could get a virtual fs diff, what would you do with it?
+
+It could be for keeping track of the files that have been inserted by puggle,
+then remove ones that are no longer needed?
+
+> - Look up the version from `puggle.json`
+> - Look up the new version
+>   - Could use the package's latest
+>   - Could use the highest semver compatible (no breaking changes)
+> - Generate the virtual fs changes for both versions
+> - Diff the virtual fs to see what was deleted
+
+This could also be useful for a `--dry-run` flag.
 
 ---
 
