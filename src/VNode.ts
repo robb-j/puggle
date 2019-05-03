@@ -51,6 +51,7 @@ export class VFile extends VNode {
   }
 
   serialize(path: string) {
+    // TODO: Merge logic ...
     return writeFile(join(path, this.name), this.contents)
   }
 }
@@ -121,6 +122,7 @@ export enum VConfigType {
 export class VConfig extends VFile {
   contents: any
   type: VConfigType
+  cosmiName?: string
 
   constructor(name: string, type: VConfigType, contents: any) {
     super(name)
@@ -153,6 +155,17 @@ export class VConfig extends VFile {
 }
 
 //
+// A config which uses cosmoconfig
+//
+// export class VCosmiconfig extends VConfig {
+//   cosmiName: string
+//
+//   constructor(cosmiName: string, type: VConfigType, contents: any) {
+//     super(cosmiName, type, contents)
+//   }
+// }
+
+//
 // The current customization points of a package.json
 //
 export type VPackageJsonConfig = {
@@ -168,53 +181,53 @@ export type VPackageJsonConfig = {
 // Ideas:
 // - Some way of dynamically declaring (dev|prod|optional) dependancies
 //
-export class VPackageJson extends VConfig {
-  config: VPackageJsonConfig
-
-  constructor(config: VPackageJsonConfig, contents: any = {}) {
-    super('package.json', VConfigType.json, contents)
-    this.config = config
-  }
-
-  renderContents(existing: any) {
-    let output: any = {}
-
-    for (let property in this.contents) {
-      output[property] =
-        existing[property] === undefined &&
-        this.contents[property] !== undefined
-          ? this.contents[property]
-          : existing[property]
-    }
-
-    if (this.config.name && !output.name) {
-      output.name = this.config.name
-    }
-
-    if (this.config.repository && !output.repository) {
-      output.repository = this.config.repository
-    }
-
-    if (this.config.author && !output.author) {
-      output.author = this.config.author
-    }
-
-    return output
-  }
-
-  async serialize(path: string) {
-    const fullPath = join(path, this.name)
-
-    // Load the existing package.json, ignoring if it wasn't found
-    let existing
-    try {
-      existing = JSON.parse(await readFile(fullPath, 'utf8'))
-    } catch (error) {
-      existing = {}
-    }
-
-    // Write the new package.json
-    let data = JSON.stringify(this.renderContents(existing), null, 2)
-    return writeFile(fullPath, data)
-  }
-}
+// export class VPackageJson extends VConfig {
+//   config: VPackageJsonConfig
+//
+//   constructor(config: VPackageJsonConfig, contents: any = {}) {
+//     super('package.json', VConfigType.json, contents)
+//     this.config = config
+//   }
+//
+//   renderContents(existing: any) {
+//     let output: any = {}
+//
+//     for (let property in this.contents) {
+//       output[property] =
+//         existing[property] === undefined &&
+//         this.contents[property] !== undefined
+//           ? this.contents[property]
+//           : existing[property]
+//     }
+//
+//     if (this.config.name && !output.name) {
+//       output.name = this.config.name
+//     }
+//
+//     if (this.config.repository && !output.repository) {
+//       output.repository = this.config.repository
+//     }
+//
+//     if (this.config.author && !output.author) {
+//       output.author = this.config.author
+//     }
+//
+//     return output
+//   }
+//
+//   async serialize(path: string) {
+//     const fullPath = join(path, this.name)
+//
+//     // Load the existing package.json, ignoring if it wasn't found
+//     let existing
+//     try {
+//       existing = JSON.parse(await readFile(fullPath, 'utf8'))
+//     } catch (error) {
+//       existing = {}
+//     }
+//
+//     // Write the new package.json
+//     let data = JSON.stringify(this.renderContents(existing), null, 2)
+//     return writeFile(fullPath, data)
+//   }
+// }

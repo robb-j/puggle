@@ -40,7 +40,7 @@ Press ^C at any time to quit.
     // Give the user the option to change it
     //
     if (path === '.') {
-      let check = await prompts(
+      let { confirmed } = await prompts(
         {
           type: 'confirm',
           name: 'confirmed',
@@ -50,7 +50,7 @@ Press ^C at any time to quit.
         promptOpts
       )
 
-      if (!check.confirmed) {
+      if (!confirmed) {
         let { newPath } = await prompts(
           {
             type: 'text',
@@ -115,7 +115,7 @@ Press ^C at any time to quit.
     //
     // Make the virtual file system into a real one
     //
-    await tree.serialize(join(process.cwd(), path))
+    // await tree.serialize(join(process.cwd(), path))
   } catch (error) {
     //
     // Catch and log any errors then exit the program
