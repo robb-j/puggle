@@ -1,7 +1,7 @@
 import { VDir, VConfig, VConfigType } from '../VNode'
 import { Pluginable, PluginArgs } from '../Pluginable'
 import prompts from 'prompts'
-import semver from 'semver'
+// import semver from 'semver'
 
 type StringMap = {
   [idx: string]: string | undefined
@@ -41,11 +41,33 @@ export const defaultPackage = {
 }
 
 export class VPackageJson extends VConfig {
-  contents: NPMPackage
+  values: NPMPackage
+
+  get scripts() {
+    return this.values.scripts
+  }
+
+  get dependencies() {
+    return this.values.dependencies
+  }
+
+  get devDependencies() {
+    return this.values.devDependencies
+  }
+
+  static getPackageOrFail(node: VDir): VPackageJson {
+    let pkg = node.find('package.json')
+
+    if (!pkg || !(pkg instanceof VPackageJson)) {
+      throw new Error('No package.json')
+    }
+
+    return pkg
+  }
 
   constructor() {
     super('package.json', VConfigType.json, null)
-    this.contents = { ...defaultPackage }
+    this.values = { ...defaultPackage }
   }
 }
 
@@ -68,8 +90,8 @@ export class NPMPlugin implements Pluginable {
     })
 
     let npmPackage = new VPackageJson()
-    npmPackage.contents.name = name
-    npmPackage.contents.repository = repository
+    npmPackage.values.name = name
+    npmPackage.values.repository = repository
 
     root.children.push(npmPackage)
   }

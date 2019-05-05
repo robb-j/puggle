@@ -5,6 +5,7 @@ import { join } from 'path'
 import Yaml from 'yaml'
 import nestedGet from 'lodash.get'
 import nestedSet from 'lodash.set'
+import { trimLineStart } from './utils'
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -50,9 +51,13 @@ export class VFile extends VNode {
     this.contents = contents
   }
 
+  prepareContents(): string {
+    return this.contents
+  }
+
   serialize(path: string) {
     // TODO: Merge logic ...
-    return writeFile(join(path, this.name), this.contents)
+    return writeFile(join(path, this.name), this.prepareContents())
   }
 }
 
@@ -120,37 +125,67 @@ export enum VConfigType {
 // - Provide merging / updating so plugins can alter configs if they want
 //
 export class VConfig extends VFile {
-  contents: any
+  values: any
   type: VConfigType
   cosmiName?: string
+  comment?: string
 
-  constructor(name: string, type: VConfigType, contents: any) {
+  constructor(
+    name: string,
+    type: VConfigType,
+    values: any,
+    args: { cosmiName?: string; comment?: string } = {}
+  ) {
     super(name)
     this.type = type
-    this.contents = contents
+    this.values = values
+    this.cosmiName = args.cosmiName
+    this.comment = args.comment
   }
 
-  async serialize(path: string) {
-    let data: any
+  prepareContents() {
+    let comment = trimLineStart`
+    #
+    # ${this.comment || this.name}
+    #
+    
+    `
 
     switch (this.type) {
       case VConfigType.json:
-        data = JSON.stringify(this.contents, null, 2)
-        break
+        return JSON.stringify(this.contents, null, 2)
       case VConfigType.yaml:
-        data = Yaml.stringify(this.contents)
-        break
+        return comment + Yaml.stringify(this.contents)
     }
-
-    return writeFile(join(path, this.name), data)
   }
 
   read(path: string) {
-    return nestedGet(this.contents, path)
+    return nestedGet(this.values, path)
   }
 
   write(path: string, value: any) {
-    return nestedSet(this.contents, path, value)
+    return nestedSet(this.values, path, value)
+  }
+}
+
+export class VIgnoreFile extends VFile {
+  rules: string[]
+  description: string
+
+  constructor(name: string, description: string = name, rules: string[] = []) {
+    super(name)
+    this.description = description
+    this.rules = rules
+  }
+
+  prepareContents() {
+    return trimLineStart`
+      #
+      # ${this.description}
+      #
+      
+      ${this.rules.join('\n')}
+    `
   }
 }
 
@@ -168,11 +203,11 @@ export class VConfig extends VFile {
 //
 // The current customization points of a package.json
 //
-export type VPackageJsonConfig = {
-  name?: string
-  repository?: string
-  author?: string
-}
+// export type VPackageJsonConfig = {
+//   name?: string
+//   repository?: string
+//   author?: string
+// }
 
 //
 // A virtual package.json

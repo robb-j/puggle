@@ -11,3 +11,7 @@ export interface Pluginable {
 
   extendVirtualFileSystem(root: VDir, args: PluginArgs): Promise<void>
 }
+
+export interface Preset extends Pluginable {
+  plugins: Pluginable[]
+}

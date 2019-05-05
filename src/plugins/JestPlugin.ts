@@ -14,12 +14,10 @@ export class JestPlugin implements Pluginable {
   version = '0.0.0'
 
   async extendVirtualFileSystem(root: VDir, args: PluginArgs) {
-    let npmPackage = root.find('package.json') as VPackageJson
+    let npmPackage = VPackageJson.getPackageOrFail(root)
 
     // Check for typescript
     // let tsconfig = root.find('tsconfig.json') as VConfig
-
-    if (!npmPackage) throw new Error('No package.json')
 
     // console.log(root)
     // console.log(npmPackage)
@@ -30,6 +28,6 @@ export class JestPlugin implements Pluginable {
 
     config.cosmiName = 'jest'
 
-    npmPackage.contents.dependencies['jest'] = '^24.1.0'
+    npmPackage.dependencies['jest'] = '^24.1.0'
   }
 }

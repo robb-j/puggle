@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { join } from 'path'
-import { VFile, VDir, VRoot, VPackageJson } from './VNode'
+import { VFile, VDir, VRoot, VIgnoreFile } from './VNode'
 import * as file from './file'
 import prompts from 'prompts'
 
@@ -104,10 +104,15 @@ Press ^C at any time to quit.
       new VFile('.dockerignore', file.dockerignore()),
       new VFile('.editorconfig', file.editorconfig()),
       new VFile('.eslintrc.yml', file.eslintYml()),
-      new VFile('.gitignore', file.gitignore()),
-      new VFile('.prettierrc', file.prettierrcYml()),
+      new VIgnoreFile('.gitignore', 'Ignore files from git source control', [
+        'node_modules',
+        'coverage',
+        '*.env',
+        '.DS_Store'
+      ]),
+      new VFile('.prettierrc.yml', file.prettierrcYml()),
       new VFile('Dockerfile', file.dockerfile()),
-      new VPackageJson(packageConf, file.packageJson()),
+      // new VPackageJson(packageConf, file.packageJson()),
       new VFile('README.md', file.readme()),
       new VFile('REGISTRY', file.registry())
     ])
@@ -115,7 +120,7 @@ Press ^C at any time to quit.
     //
     // Make the virtual file system into a real one
     //
-    // await tree.serialize(join(process.cwd(), path))
+    await tree.serialize(join(process.cwd(), 'test'))
   } catch (error) {
     //
     // Catch and log any errors then exit the program
