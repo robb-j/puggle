@@ -49,11 +49,12 @@ export class PrettierPlugin implements Pluginable {
     //
     // Add a prettierignore
     //
+    const ignoreRules = ['coverage', 'node_modules']
+    
+    if (puggle.hasPlugin(TypescriptPlugin)) ignoreRules.push('dist')
+    
     root.addChild(
-      new VIgnoreFile('.prettierignore', 'Files for prettier to ignore', [
-        'dist',
-        'coverage'
-      ])
+      new VIgnoreFile('.prettierignore', 'Files for prettier to ignore', ignoreRules)
     )
   }
 }

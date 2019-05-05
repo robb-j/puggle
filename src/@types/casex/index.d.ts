@@ -1,1 +1,5 @@
-export default function casex(value: string, pattern: string): string
+declare function casex(value: string, pattern: string): string
+
+declare module 'casex' {
+  export = casex
+}

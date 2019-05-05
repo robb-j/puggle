@@ -4,8 +4,6 @@ import { join } from 'path'
 import { lastDirectory } from './utils'
 import casex from 'casex'
 
-console.log(casex)
-
 const promptOptions = {
   onCancel: () => process.exit(1)
 }
@@ -32,7 +30,10 @@ export interface Preset extends Pluginable {
 }
 
 function formatClassName(object: any, extension: string) {
-  return object.constructor.name.replace(new RegExp(`${extension}$`), '')
+  return casex(
+    object.constructor.name.replace(new RegExp(`${extension}$`), ''),
+    'ca-se'
+  )
 }
 
 function getPluginName(plugin: Pluginable) {
@@ -93,7 +94,7 @@ export class Puggle {
       }
 
       root.addChild(
-        new VConfigFile('.pugglerc', VConfigType.json, {
+        new VConfigFile('puggle.json', VConfigType.json, {
           version: process.env.npm_package_version,
           preset: {
             name: formatClassName(this.preset, 'Preset'),
@@ -105,7 +106,7 @@ export class Puggle {
 
       await this.preset.extendVirtualFileSystem(root, args)
 
-      await root.serialize(join(__dirname, '../test'))
+      await root.serialize(join(__dirname, '../test', projectName))
     } catch (error) {
       console.log(error.message)
     }

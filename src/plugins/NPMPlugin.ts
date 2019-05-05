@@ -75,12 +75,20 @@ export class NpmPlugin implements Pluginable {
   version = '0.0.0'
 
   async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
-    let { packageName } = await prompts({
-      type: 'text',
-      name: 'packageName',
-      message: 'package name',
-      initial: projectName
-    })
+    let { packageName, packageInfo } = await prompts([
+      {
+        type: 'text',
+        name: 'packageName',
+        message: 'package name',
+        initial: projectName
+      },
+      {
+        type: 'text',
+        name: 'packageInfo',
+        message: 'description',
+        initial: 'Setup with puggle'
+      }
+    ])
 
     let { repository } = await prompts({
       type: 'text',
@@ -91,6 +99,7 @@ export class NpmPlugin implements Pluginable {
 
     let npmPackage = new VPackageJson()
     npmPackage.values.name = packageName
+    npmPackage.values.description = packageInfo
     npmPackage.values.repository = repository
 
     root.addChild(npmPackage)

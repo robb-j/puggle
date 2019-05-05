@@ -9,7 +9,7 @@ export class JestPlugin implements Pluginable {
   async extendVirtualFileSystem(root: VDir, { puggle }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
 
-    npmPackage.dependencies['jest'] = '^24.1.0'
+    npmPackage.devDependencies['jest'] = '^24.7.1'
 
     if (puggle.hasPlugin(TypescriptPlugin)) {
       npmPackage.values['jest'] = {
@@ -19,7 +19,7 @@ export class JestPlugin implements Pluginable {
       }
 
       npmPackage.devDependencies['ts-jest'] = '^24.0.1'
-      npmPackage.devDependencies['@types/jest'] = '^24.0.6'
+      npmPackage.devDependencies['@types/jest'] = '^24.0.11'
     }
 
     npmPackage.scripts['test'] = 'jest'

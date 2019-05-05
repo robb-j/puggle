@@ -61,6 +61,7 @@ export class RobbJNodePreset implements Preset {
       new VIgnoreFile('.gitignore', 'Ignore files from git source control', [
         'node_modules',
         'coverage',
+        'dist',
         '*.env',
         '.DS_Store'
       ])

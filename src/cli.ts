@@ -3,6 +3,7 @@
 import { RobbJNodePreset } from './presets/RobbjNodePreset'
 import { Puggle } from './Puggle'
 import { trimInlineTemplate } from './utils'
+import { RobbJTsNodePreset } from './presets/RobbJTsNodePreset';
 
 // import { join } from 'path'
 // import { VFile, VDir, VRoot, VIgnoreFile } from './VNode'
@@ -26,7 +27,7 @@ const message = trimInlineTemplate`
     console.log(message)
 
     // let preset = new RobbJNodePreset()
-    let puggle = new Puggle(new RobbJNodePreset())
+    let puggle = new Puggle(new RobbJTsNodePreset())
 
     await puggle.run()
   } catch (error) {
