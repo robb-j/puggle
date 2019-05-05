@@ -1,6 +1,6 @@
 import { Pluginable, Preset } from './Pluginable'
 import prompts from 'prompts'
-import { VRoot } from './VNode'
+import { VDir } from './VNode'
 import { join } from 'path'
 
 const promptOptions = {
@@ -43,7 +43,7 @@ export class Puggle {
         promptOptions
       )
 
-      const root = new VRoot()
+      const root = new VDir('.', [])
       const args = { projectName, targetPath }
 
       for (let plugin of this.preset.plugins) {

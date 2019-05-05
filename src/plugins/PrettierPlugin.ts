@@ -21,45 +21,26 @@ export class PrettierPlugin implements Pluginable {
     //
     // Add a prettier config
     //
-    root.addChild(
-      new VConfig(
-        '.prettierrc.yml',
-        VConfigType.yaml,
-        {
-          semi: false,
-          singleQuote: true
-        },
-        {
-          cosmiName: 'prettier',
-          comment: 'Configuration for Prettier (https://prettier.io)'
-        }
-      )
-    )
+    npmPackage.values['prettier'] = {
+      semi: false,
+      singleQuote: true
+    }
 
     //
     // Add a husky config to run lint-staged before commits
     //
-    root.addChild(
-      new VConfig(
-        '.huskyrc',
-        VConfigType.json,
-        {
-          hooks: {
-            'pre-commit': 'lint-staged'
-          }
-        },
-        { cosmiName: 'husky' }
-      )
-    )
+    npmPackage.values['husky'] = {
+      hooks: {
+        'pre-commit': 'lint-staged'
+      }
+    }
 
     //
     // Add a lint-staged config to run prettier
     //
-    root.addChild(
-      new VConfig('.lintstagedrc', VConfigType.json, {
-        [matcher]: ['prettier --write', 'git add']
-      })
-    )
+    npmPackage.values['lint-staged'] = {
+      [matcher]: ['prettier --write', 'git add']
+    }
 
     //
     // Add an npm script to run prettier
