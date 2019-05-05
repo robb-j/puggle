@@ -5,7 +5,7 @@ import { join } from 'path'
 import Yaml from 'yaml'
 import nestedGet from 'lodash.get'
 import nestedSet from 'lodash.set'
-import { trimLineStart } from './utils'
+import { trimInlineTemplate } from './utils'
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -35,6 +35,14 @@ export class VNode {
   }
 
   async serialize(path: string): Promise<void> {}
+
+  getRoot(): VRoot | undefined {
+    let node: VNode | undefined = this
+
+    while (node.parent) node = node.parent
+
+    return node instanceof VRoot ? node : undefined
+  }
 }
 
 //
@@ -93,6 +101,13 @@ export class VDir extends VNode {
     return null
   }
 
+  addChild(...nodes: VNode[]) {
+    for (let node of nodes) {
+      node.parent = this
+      this.children.push(node)
+    }
+  }
+
   async serialize(path: string) {
     const dir = join(path, this.name)
     await mkdir(dir, { recursive: true })
@@ -144,7 +159,7 @@ export class VConfig extends VFile {
   }
 
   prepareContents() {
-    let comment = trimLineStart`
+    let comment = trimInlineTemplate`
     #
     # ${this.comment || this.name}
     #
@@ -153,9 +168,9 @@ export class VConfig extends VFile {
 
     switch (this.type) {
       case VConfigType.json:
-        return JSON.stringify(this.contents, null, 2)
+        return JSON.stringify(this.values, null, 2)
       case VConfigType.yaml:
-        return comment + Yaml.stringify(this.contents)
+        return comment + Yaml.stringify(this.values)
     }
   }
 
@@ -179,7 +194,7 @@ export class VIgnoreFile extends VFile {
   }
 
   prepareContents() {
-    return trimLineStart`
+    return trimInlineTemplate`
       #
       # ${this.description}
       #

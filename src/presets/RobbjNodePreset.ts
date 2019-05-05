@@ -3,9 +3,9 @@ import { JestPlugin } from '../plugins/JestPlugin'
 import { NPMPlugin } from '../plugins/NPMPlugin'
 import { PrettierPlugin } from '../plugins/PrettierPlugin'
 import { VDir, VFile, VIgnoreFile } from '../VNode'
-import { trimLineStart } from '../utils'
+import { trimInlineTemplate } from '../utils'
 
-const indexJs = (name: string) => trimLineStart`
+const indexJs = (name: string) => trimInlineTemplate`
   // 
   // The app entrypoint
   // 
@@ -15,7 +15,7 @@ const indexJs = (name: string) => trimLineStart`
   })()
 `
 
-const editorconfig = () => trimLineStart`
+const editorconfig = () => trimInlineTemplate`
   #
   # Editor config, for sharing IDE preferences (https://editorconfig.org)
   #
@@ -31,17 +31,28 @@ const editorconfig = () => trimLineStart`
   insert_final_newline = true
 `
 
+const readme = (name: string) => trimInlineTemplate`
+  # ${name}
+  
+  > Coming soon
+  
+  ---
+  
+  > This project was set up by [puggle](https://npm.im/puggle)
+`
+
 export class RobbJNodePreset implements Preset {
   version = '0.0.0'
 
-  plugins = [new JestPlugin(), new NPMPlugin(), new PrettierPlugin()]
+  plugins = [new NPMPlugin(), new JestPlugin(), new PrettierPlugin()]
 
-  async extendVirtualFileSystem(root: VDir, { dirname }: PluginArgs) {
+  async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
     //
-    // Add the src directory
+    // Add bespoke files
     //
-    root.children.push(
-      new VDir('src', [new VFile('index.js', indexJs(dirname))]),
+    root.addChild(
+      new VFile('README.md', readme(projectName)),
+      new VDir('src', [new VFile('index.js', indexJs(projectName))]),
       new VFile('.editorconfig', editorconfig()),
       new VIgnoreFile('.gitignore', 'Ignore files from git source control', [
         'node_modules',

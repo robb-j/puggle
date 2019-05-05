@@ -7,14 +7,14 @@
  * but when outputted it should have no whitespace before each line
  *
  * ```js
- * console.log(trimLineStart`
+ * console.log(trimInlineTemplate`
  *   Hello, world
  * `)
  * ```
  *
  * Would output 'Hello, world\n'
  */
-export function trimLineStart(
+export function trimInlineTemplate(
   strings: TemplateStringsArray,
   ...args: any[]
 ): string {

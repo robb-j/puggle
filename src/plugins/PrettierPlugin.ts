@@ -21,7 +21,7 @@ export class PrettierPlugin implements Pluginable {
     //
     // Add a prettier config
     //
-    root.children.push(
+    root.addChild(
       new VConfig(
         '.prettierrc.yml',
         VConfigType.yaml,
@@ -39,7 +39,7 @@ export class PrettierPlugin implements Pluginable {
     //
     // Add a husky config to run lint-staged before commits
     //
-    root.children.push(
+    root.addChild(
       new VConfig(
         '.huskyrc',
         VConfigType.json,
@@ -55,7 +55,7 @@ export class PrettierPlugin implements Pluginable {
     //
     // Add a lint-staged config to run prettier
     //
-    root.children.push(
+    root.addChild(
       new VConfig('.lintstagedrc', VConfigType.json, {
         [matcher]: ['prettier --write', 'git add']
       })
@@ -69,7 +69,7 @@ export class PrettierPlugin implements Pluginable {
     //
     // Add a prettierignore
     //
-    root.children.push(
+    root.addChild(
       new VIgnoreFile('.prettierignore', 'Files for prettier to ignore', [
         'dist',
         'coverage'

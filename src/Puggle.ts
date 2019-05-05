@@ -1,10 +1,10 @@
 import { Pluginable, Preset } from './Pluginable'
 import prompts from 'prompts'
+import { VRoot } from './VNode'
+import { join } from 'path'
 
 const promptOptions = {
-  onCancel: () => {
-    throw new Error('Cancelled')
-  }
+  onCancel: () => process.exit(1)
 }
 
 function lastDirectory(path: string) {
@@ -19,34 +19,42 @@ export class Puggle {
     this.preset = preset
   }
 
-  async run(cwd: string = '.') {
+  async run(initialPath = '.') {
     try {
-      let { directory } = await prompts(
-        [
-          {
-            type: 'text',
-            name: 'directory'
-          }
-        ],
+      let { targetPath } = await prompts(
+        {
+          type: 'text',
+          name: 'targetPath',
+          message: 'path (or "." for current directory)',
+          initial: initialPath
+        },
         promptOptions
       )
 
-      console.log({ directory })
+      let { projectName } = await prompts(
+        {
+          type: 'text',
+          name: 'projectName',
+          message: 'name',
+          initial: lastDirectory(
+            targetPath === '.' ? process.cwd() : targetPath
+          )
+        },
+        promptOptions
+      )
 
-      // if (path === '.') {
-      //   let { confirmed } = await prompts({
-      //     type: 'confirm',
-      //     name: 'confirmed',
-      //     message: 'Use current directory?',
-      //     initial: true
-      //   }, promptOptions)
-      //
-      //   if (!confirmed)
-      // }
+      const root = new VRoot()
+      const args = { projectName, targetPath }
+
+      for (let plugin of this.preset.plugins) {
+        await plugin.extendVirtualFileSystem(root, args)
+      }
+
+      await this.preset.extendVirtualFileSystem(root, args)
+
+      await root.serialize(join(__dirname, '../test'))
     } catch (error) {
       console.log(error.message)
     }
   }
 }
-
-let puggle = new Puggle()

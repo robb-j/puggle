@@ -74,25 +74,25 @@ export class VPackageJson extends VConfig {
 export class NPMPlugin implements Pluginable {
   version = '0.0.0'
 
-  async extendVirtualFileSystem(root: VDir, { dirname }: PluginArgs) {
-    let { name } = await prompts({
+  async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
+    let { packageName } = await prompts({
       type: 'text',
-      name: 'name',
+      name: 'packageName',
       message: 'package name',
-      initial: dirname
+      initial: projectName
     })
 
     let { repository } = await prompts({
       type: 'text',
       name: 'repository',
       message: 'git repository',
-      initial: name
+      hint: `$USERNAME/${projectName}`
     })
 
     let npmPackage = new VPackageJson()
-    npmPackage.values.name = name
+    npmPackage.values.name = packageName
     npmPackage.values.repository = repository
 
-    root.children.push(npmPackage)
+    root.addChild(npmPackage)
   }
 }

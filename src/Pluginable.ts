@@ -1,8 +1,8 @@
 import { VDir } from './VNode'
 
 export type PluginArgs = {
-  path: string
-  dirname: string
+  targetPath: string
+  projectName: string
   // previousPluginVersions: { [idx: string]: string | undefined }
 }
 
