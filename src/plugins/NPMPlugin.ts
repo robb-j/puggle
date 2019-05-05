@@ -1,5 +1,5 @@
-import { VDir, VConfig, VConfigType } from '../VNode'
-import { Pluginable, PluginArgs } from '../Pluginable'
+import { VDir, VConfigFile, VConfigType } from '../vnodes'
+import { Pluginable, PluginArgs } from '../Puggle'
 import prompts from 'prompts'
 // import semver from 'semver'
 
@@ -40,7 +40,7 @@ export const defaultPackage = {
   devDependencies: {}
 }
 
-export class VPackageJson extends VConfig {
+export class VPackageJson extends VConfigFile {
   values: NPMPackage
 
   get scripts() {
@@ -71,7 +71,7 @@ export class VPackageJson extends VConfig {
   }
 }
 
-export class NPMPlugin implements Pluginable {
+export class NpmPlugin implements Pluginable {
   version = '0.0.0'
 
   async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {

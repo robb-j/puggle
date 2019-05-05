@@ -4,14 +4,14 @@ import { trimInlineTemplate } from '../utils'
 
 import { JestPlugin, NpmPlugin, PrettierPlugin, EslintPlugin } from '../plugins'
 
-const indexJs = (name: string) => trimInlineTemplate`
+const indexTs = (name: string) => trimInlineTemplate`
   // 
   // The app entrypoint
   // 
-
+  
   ;(async () => {
     console.log('Hello, ${name}!')
-  })()
+  })
 `
 
 const editorconfig = () => trimInlineTemplate`
@@ -40,30 +40,6 @@ const readme = (name: string) => trimInlineTemplate`
   > This project was set up by [puggle](https://npm.im/puggle)
 `
 
-export class RobbJNodePreset implements Preset {
-  version = '0.0.0'
-
-  plugins = [
-    new NpmPlugin(),
-    new JestPlugin(),
-    new PrettierPlugin(),
-    new EslintPlugin()
-  ]
-
-  async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
-    //
-    // Add extra files
-    //
-    root.addChild(
-      new VFile('README.md', readme(projectName)),
-      new VDir('src', [new VFile('index.js', indexJs(projectName))]),
-      new VFile('.editorconfig', editorconfig()),
-      new VIgnoreFile('.gitignore', 'Ignore files from git source control', [
-        'node_modules',
-        'coverage',
-        '*.env',
-        '.DS_Store'
-      ])
-    )
-  }
-}
+// export class RobbJTsNodePreset implements Preset {
+//   version = '0.0.0'
+// }

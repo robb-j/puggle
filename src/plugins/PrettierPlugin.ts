@@ -1,20 +1,19 @@
-import { Pluginable, PluginArgs } from '../Pluginable'
-import { VDir, VConfig, VConfigType, VIgnoreFile } from '..'
+import { Pluginable, PluginArgs } from '../Puggle'
+import { VDir, VIgnoreFile } from '../vnodes'
 import { VPackageJson } from './NPMPlugin'
+import { TypescriptPlugin } from './TypescriptPlugin'
 
 export class PrettierPlugin implements Pluginable {
   version = '0.0.0'
 
-  async extendVirtualFileSystem(root: VDir, args: PluginArgs) {
+  async extendVirtualFileSystem(root: VDir, { puggle }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
-
-    let usingTypescript = !!root.find('tsconfig.json')
 
     npmPackage.devDependencies['prettier'] = '^1.16.4'
     npmPackage.devDependencies['husky'] = '^1.3.1'
     npmPackage.devDependencies['lint-staged'] = '^8.1.4'
 
-    const matcher = usingTypescript
+    const matcher = puggle.hasPlugin(TypescriptPlugin)
       ? '*.{js,json,css,md,ts,tsx}'
       : '*.{js,json,css,md}'
 

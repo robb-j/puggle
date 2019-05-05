@@ -1,3 +1,6 @@
+import fs from 'fs'
+import { promisify } from 'util'
+
 /**
  * An ES6 template function to trim the start of each line of a string
  * based on the number of lines whitespace the first line has.
@@ -37,3 +40,27 @@ export function trimInlineTemplate(
 
   return str.replace(/^\n/, '').replace(replacer, '')
 }
+
+/**
+ * Get the last directory in a path
+ */
+export function lastDirectory(path: string) {
+  let parts = path.split('/')
+  return parts[parts.length - 1] || '/'
+}
+
+/**
+ * Remove preceding or trailing slashes from a string
+ */
+export const removeSurroundingSlashes = (input: string) => {
+  return input.replace(/^\/+/, '').replace(/\/+$/, '')
+}
+
+/** fs.readFile but with promises */
+export const readFile = promisify(fs.readFile)
+
+/** fs.writeFile but with promises */
+export const writeFile = promisify(fs.writeFile)
+
+/** fs.mkdir but with promises */
+export const mkdir = promisify(fs.mkdir)

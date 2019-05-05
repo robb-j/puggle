@@ -1,0 +1,46 @@
+import { VDir, VConfigType, VConfigFile } from '../vnodes'
+import { Pluginable, PluginArgs } from '../Puggle'
+import { VPackageJson } from './NPMPlugin'
+import { PrettierPlugin } from './PrettierPlugin'
+
+export class EslintPlugin implements Pluginable {
+  version = '0.0.0'
+
+  async extendVirtualFileSystem(root: VDir, { puggle }: PluginArgs) {
+    let npmPackage = VPackageJson.getPackageOrFail(root)
+
+    // Add required eslint dependencies
+    Object.assign(npmPackage.dependencies, {
+      eslint: '^5.14.0',
+      'eslint-config-standard': '^12.0.0',
+      'eslint-plugin-import': '^2.16.0',
+      'eslint-plugin-node': '^8.0.1',
+      'eslint-plugin-promise': '^4.0.1',
+      'eslint-plugin-standard': '^4.0.0'
+    })
+
+    let conf = {
+      root: true,
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 2018
+      },
+      env: {
+        node: true
+      },
+      extends: ['standard']
+    }
+
+    // Tweak ourself if prettier is also being used
+    if (puggle.hasPlugin(PrettierPlugin)) {
+      // Add the eslint-config-prettier extension
+      npmPackage.dependencies['eslint-config-prettier'] = '^4.0.0'
+
+      // Add prettier usage to the config
+      conf.extends.push('prettier', 'prettier/standard')
+    }
+
+    // Add the config file
+    root.addChild(new VConfigFile('.eslintrc.yml', VConfigType.yaml, conf))
+  }
+}
