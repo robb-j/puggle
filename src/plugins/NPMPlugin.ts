@@ -1,6 +1,7 @@
 import { VDir, VConfigFile, VConfigType } from '../vnodes'
 import { Pluginable, PluginArgs } from '../Puggle'
 import prompts from 'prompts'
+import { sortObjectKeys } from '../utils';
 // import semver from 'semver'
 
 type StringMap = {
@@ -68,6 +69,14 @@ export class VPackageJson extends VConfigFile {
   constructor() {
     super('package.json', VConfigType.json, null)
     this.values = { ...defaultPackage }
+  }
+  
+  serialize(path: string) {
+    this.values.dependencies = sortObjectKeys(this.values.dependencies)
+    this.values.devDependencies = sortObjectKeys(this.values.devDependencies)
+    this.values.scripts = sortObjectKeys(this.values.scripts)
+    
+    return super.serialize(path)
   }
 }
 
