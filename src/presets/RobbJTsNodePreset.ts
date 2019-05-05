@@ -6,8 +6,8 @@ import {
   JestPlugin,
   NpmPlugin,
   PrettierPlugin,
-  TypescriptPlugin
-  VPackageJson,
+  TypescriptPlugin,
+  VPackageJson
 } from '../plugins'
 
 const indexTs = (name: string) => trimInlineTemplate`
@@ -64,22 +64,22 @@ export class RobbJTsNodePreset implements Preset {
   ]
 
   async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
-    
     let npmPackage = VPackageJson.getPackageOrFail(root)
-    
-    // 
+
+    //
     // Tweak the package.json
-    // 
+    //
     npmPackage.dependencies['dotenv'] = '^7.0.0'
     npmPackage.devDependencies['nodemon'] = '^1.18.10'
-    
+
     npmPackage.values['main'] = 'dist/index.js'
     npmPackage.values['types'] = 'dist/index.d.js'
-    
+
     npmPackage.scripts['preversion'] = 'npm run test -s && npm run build'
     npmPackage.scripts['start'] = 'node -r dotenv/config dist/index.js'
-    npmPackage.scripts['dev'] = 'NODE_ENV=development nodemon -w src -e ts -x "npx ts-node -r dotenv/config" src/index.ts'
-    
+    npmPackage.scripts['dev'] =
+      'NODE_ENV=development nodemon -w src -e ts -x "npx ts-node -r dotenv/config" src/index.ts'
+
     //
     // Add extra files
     //
