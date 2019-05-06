@@ -1,5 +1,8 @@
 # Puggle
 
+[![Build Status](https://travis-ci.org/robb-j/puggle.svg?branch=master)](https://travis-ci.org/robb-j/puggle)
+[![Coverage Status](https://coveralls.io/repos/github/robb-j/puggle/badge.svg?branch=master)](https://coveralls.io/github/robb-j/puggle?branch=master)
+
 A CLI for bootstrapping and keeping project config up-to-date.
 
 > **WIP** This project is still very much a work-in-progress,
