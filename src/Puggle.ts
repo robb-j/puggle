@@ -3,7 +3,7 @@ import { VDir, VConfigType, VConfigFile } from './vnodes'
 import { join } from 'path'
 import { lastDirectory } from './utils'
 import casex from 'casex'
-import { Preset, PluginClass, PluginArgs } from './types';
+import { Preset, PluginClass } from './types'
 
 const promptOptions = {
   onCancel: () => process.exit(1)

@@ -25,7 +25,7 @@ and determine whether to init / update based on a `puggle.json` presence
 
 A sample `init` run through:
 
-> Looking for all puggle-generator-* packages available on the system
+> Looking for all puggle-generator-\* packages available on the system
 
 ```
 path: ____  (if not passed to the CLI)
@@ -67,6 +67,6 @@ Continue: (Y/n)
 
 There are 5 redundant files:
 - mocha.opts
-- 
+-
 
 ```

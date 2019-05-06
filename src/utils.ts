@@ -65,19 +65,18 @@ export const writeFile = promisify(fs.writeFile)
 /** fs.mkdir but with promises */
 export const mkdir = promisify(fs.mkdir)
 
-
 type StringKeyed = { [idx: string]: any }
 
 /** Sort an object's keys alphabetically */
 export function sortObjectKeys<T extends StringKeyed>(input: T): T {
   const output: T = {} as any
-  
+
   let keys = Object.keys(input)
   keys.sort()
-  
+
   for (const key of keys) {
     output[key] = input[key]
   }
-  
+
   return output
 }

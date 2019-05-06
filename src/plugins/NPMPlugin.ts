@@ -1,7 +1,7 @@
 import { VDir, VConfigFile, VConfigType } from '../vnodes'
 import { Pluginable, PluginArgs } from '../types'
 import prompts from 'prompts'
-import { sortObjectKeys } from '../utils';
+import { sortObjectKeys } from '../utils'
 
 type StringMap = {
   [idx: string]: string | undefined
@@ -69,12 +69,12 @@ export class VPackageJson extends VConfigFile {
     super('package.json', VConfigType.json, null)
     this.values = { ...defaultPackage }
   }
-  
+
   serialize(path: string) {
     this.values.dependencies = sortObjectKeys(this.values.dependencies)
     this.values.devDependencies = sortObjectKeys(this.values.devDependencies)
     this.values.scripts = sortObjectKeys(this.values.scripts)
-    
+
     return super.serialize(path)
   }
 }
