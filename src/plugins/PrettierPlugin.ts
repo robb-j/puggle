@@ -1,7 +1,7 @@
 import { Pluginable, PluginArgs } from '../types'
 import { VDir, VIgnoreFile } from '../vnodes'
 import { VPackageJson } from './NpmPlugin'
-import { TypescriptPlugin } from './TypescriptPlugin'
+import { TypeScriptPlugin } from './TypeScriptPlugin'
 
 export class PrettierPlugin implements Pluginable {
   version = '0.0.0'
@@ -13,7 +13,7 @@ export class PrettierPlugin implements Pluginable {
     npmPackage.devDependencies['husky'] = '^1.3.1'
     npmPackage.devDependencies['lint-staged'] = '^8.1.4'
 
-    const matcher = hasPlugin(TypescriptPlugin)
+    const matcher = hasPlugin(TypeScriptPlugin)
       ? '*.{js,json,css,md,ts,tsx}'
       : '*.{js,json,css,md}'
 
@@ -51,7 +51,7 @@ export class PrettierPlugin implements Pluginable {
     //
     const ignoreRules = ['coverage', 'node_modules']
 
-    if (hasPlugin(TypescriptPlugin)) ignoreRules.push('dist')
+    if (hasPlugin(TypeScriptPlugin)) ignoreRules.push('dist')
 
     root.addChild(
       new VIgnoreFile(

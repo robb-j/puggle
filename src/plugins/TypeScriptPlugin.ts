@@ -28,7 +28,7 @@ const baseTsconfig = {
   exclude: ['node_modules']
 }
 
-export class TypescriptPlugin implements Pluginable {
+export class TypeScriptPlugin implements Pluginable {
   version = '0.0.0'
 
   async extendVirtualFileSystem(root: VDir, args: PluginArgs) {

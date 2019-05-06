@@ -6,7 +6,7 @@ import {
   JestPlugin,
   NpmPlugin,
   PrettierPlugin,
-  TypescriptPlugin,
+  TypeScriptPlugin,
   VPackageJson
 } from '../plugins'
 
@@ -58,7 +58,7 @@ export class RobbJTsNodePreset implements Preset {
 
   plugins = [
     new NpmPlugin(),
-    new TypescriptPlugin(),
+    new TypeScriptPlugin(),
     new JestPlugin(),
     new PrettierPlugin()
   ]

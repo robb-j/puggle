@@ -1,7 +1,7 @@
 import { VDir } from '../vnodes'
 import { Pluginable, PluginArgs } from '../types'
 import { VPackageJson } from './NpmPlugin'
-import { TypescriptPlugin } from './TypescriptPlugin'
+import { TypeScriptPlugin } from './TypeScriptPlugin'
 
 export class JestPlugin implements Pluginable {
   version = '0.0.0'
@@ -11,7 +11,7 @@ export class JestPlugin implements Pluginable {
 
     npmPackage.devDependencies['jest'] = '^24.7.1'
 
-    if (hasPlugin(TypescriptPlugin)) {
+    if (hasPlugin(TypeScriptPlugin)) {
       npmPackage.values['jest'] = {
         preset: 'ts-jest',
         testEnvironment: 'node',
