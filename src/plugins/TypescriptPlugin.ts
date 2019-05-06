@@ -1,6 +1,6 @@
 import { VDir, VConfigFile, VConfigType } from '../vnodes'
-import { Pluginable, PluginArgs } from '../Puggle'
-import { VPackageJson } from './NPMPlugin'
+import { Pluginable, PluginArgs } from '../types'
+import { VPackageJson } from './NpmPlugin'
 
 const baseTsconfig = {
   compilerOptions: {

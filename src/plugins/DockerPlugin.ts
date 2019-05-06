@@ -1,5 +1,5 @@
 import { VDir } from '../vnodes'
-import { Pluginable, PluginArgs } from '../Puggle'
+import { Pluginable, PluginArgs } from '../types'
 
 // .dockerignore
 // Dockerfile depending

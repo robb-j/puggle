@@ -1,17 +1,17 @@
 import { VDir } from '../vnodes'
-import { Pluginable, PluginArgs } from '../Puggle'
-import { VPackageJson } from './NPMPlugin'
+import { Pluginable, PluginArgs } from '../types'
+import { VPackageJson } from './NpmPlugin'
 import { TypescriptPlugin } from './TypescriptPlugin'
 
 export class JestPlugin implements Pluginable {
   version = '0.0.0'
 
-  async extendVirtualFileSystem(root: VDir, { puggle }: PluginArgs) {
+  async extendVirtualFileSystem(root: VDir, { hasPlugin }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
 
     npmPackage.devDependencies['jest'] = '^24.7.1'
 
-    if (puggle.hasPlugin(TypescriptPlugin)) {
+    if (hasPlugin(TypescriptPlugin)) {
       npmPackage.values['jest'] = {
         preset: 'ts-jest',
         testEnvironment: 'node',

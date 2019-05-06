@@ -1,6 +1,6 @@
 export * from './DockerPlugin'
 export * from './EslintPlugin'
 export * from './JestPlugin'
-export * from './NPMPlugin'
+export * from './NpmPlugin'
 export * from './PrettierPlugin'
 export * from './TypescriptPlugin'

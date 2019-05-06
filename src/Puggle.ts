@@ -3,30 +3,10 @@ import { VDir, VConfigType, VConfigFile } from './vnodes'
 import { join } from 'path'
 import { lastDirectory } from './utils'
 import casex from 'casex'
+import { Preset, PluginClass, PluginArgs } from './types';
 
 const promptOptions = {
   onCancel: () => process.exit(1)
-}
-
-export interface PluginClass {
-  new (...args: any[]): Pluginable
-}
-
-export type PluginArgs = {
-  puggle: Puggle
-  targetPath: string
-  projectName: string
-  // previousPluginVersions: { [idx: string]: string | undefined }
-}
-
-export interface Pluginable {
-  version: string
-
-  extendVirtualFileSystem(root: VDir, args: PluginArgs): Promise<void>
-}
-
-export interface Preset extends Pluginable {
-  plugins: Pluginable[]
 }
 
 function formatClassName(object: any, extension: string) {
@@ -34,10 +14,6 @@ function formatClassName(object: any, extension: string) {
     object.constructor.name.replace(new RegExp(`${extension}$`), ''),
     'ca-se'
   )
-}
-
-function getPluginName(plugin: Pluginable) {
-  return formatClassName(plugin, 'Plugin')
 }
 
 export class Puggle {
@@ -80,7 +56,7 @@ export class Puggle {
         projectName,
         targetPath,
         puggle: this,
-        plugins: this.preset.plugins
+        hasPlugin: (k: PluginClass) => this.hasPlugin(k)
       }
 
       let pluginVersions: { [idx: string]: string } = {}

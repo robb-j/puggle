@@ -1,19 +1,19 @@
-import { Pluginable, PluginArgs } from '../Puggle'
+import { Pluginable, PluginArgs } from '../types'
 import { VDir, VIgnoreFile } from '../vnodes'
-import { VPackageJson } from './NPMPlugin'
+import { VPackageJson } from './NpmPlugin'
 import { TypescriptPlugin } from './TypescriptPlugin'
 
 export class PrettierPlugin implements Pluginable {
   version = '0.0.0'
 
-  async extendVirtualFileSystem(root: VDir, { puggle }: PluginArgs) {
+  async extendVirtualFileSystem(root: VDir, { hasPlugin }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
 
     npmPackage.devDependencies['prettier'] = '^1.16.4'
     npmPackage.devDependencies['husky'] = '^1.3.1'
     npmPackage.devDependencies['lint-staged'] = '^8.1.4'
 
-    const matcher = puggle.hasPlugin(TypescriptPlugin)
+    const matcher = hasPlugin(TypescriptPlugin)
       ? '*.{js,json,css,md,ts,tsx}'
       : '*.{js,json,css,md}'
 
@@ -51,7 +51,7 @@ export class PrettierPlugin implements Pluginable {
     //
     const ignoreRules = ['coverage', 'node_modules']
 
-    if (puggle.hasPlugin(TypescriptPlugin)) ignoreRules.push('dist')
+    if (hasPlugin(TypescriptPlugin)) ignoreRules.push('dist')
 
     root.addChild(
       new VIgnoreFile(

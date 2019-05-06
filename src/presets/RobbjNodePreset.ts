@@ -1,4 +1,4 @@
-import { Preset, PluginArgs } from '../Puggle'
+import { Preset, PluginArgs } from '../types'
 import { VDir, VFile, VIgnoreFile } from '../vnodes'
 import { trimInlineTemplate } from '../utils'
 

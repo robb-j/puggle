@@ -1,8 +1,7 @@
 import { VDir, VConfigFile, VConfigType } from '../vnodes'
-import { Pluginable, PluginArgs } from '../Puggle'
+import { Pluginable, PluginArgs } from '../types'
 import prompts from 'prompts'
 import { sortObjectKeys } from '../utils';
-// import semver from 'semver'
 
 type StringMap = {
   [idx: string]: string | undefined
@@ -103,7 +102,7 @@ export class NpmPlugin implements Pluginable {
       type: 'text',
       name: 'repository',
       message: 'git repository',
-      hint: `$USERNAME/${projectName}`
+      initial: `${projectName}`
     })
 
     let npmPackage = new VPackageJson()
