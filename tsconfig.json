@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
     "pretty": true,
     "newLine": "lf",

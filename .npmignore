@@ -1,0 +1,10 @@
+#
+# Ignore files from npm publishing
+#
+
+node_modules
+coverage
+.DS_Store
+*.env
+test
+dist/**/*.spec.ts
