@@ -58,6 +58,7 @@ const readme = (name: string) => trimInlineTemplate`
 `
 
 export class RobbJTsNodePreset implements Preset {
+  title = 'robb-j:ts-node'
   version = '0.0.0'
 
   plugins = [
@@ -81,8 +82,9 @@ export class RobbJTsNodePreset implements Preset {
 
     npmPackage.scripts['preversion'] = 'npm run test -s && npm run build'
     npmPackage.scripts['start'] = 'node -r dotenv/config dist/index.js'
-    npmPackage.scripts['dev'] =
-      `NODE_ENV=development nodemon -w src -e ts -x 'npx ts-node -r dotenv/config' src/index.ts`
+    npmPackage.scripts[
+      'dev'
+    ] = `NODE_ENV=development nodemon -w src -e ts -x 'npx ts-node -r dotenv/config' src/index.ts`
 
     //
     // Add extra files

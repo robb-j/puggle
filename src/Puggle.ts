@@ -1,7 +1,7 @@
 import prompts from 'prompts'
 import { VDir, VConfigType, VConfigFile } from './vnodes'
 import { join } from 'path'
-import { lastDirectory } from './utils'
+import { lastDirectory, loadPresets } from './utils'
 import casex from 'casex'
 import { Preset, PluginClass } from './types'
 
@@ -19,6 +19,23 @@ function formatClassName(object: any, extension: string) {
 export class Puggle {
   preset: Preset
 
+  static async runFromEnvironment(path?: string) {
+    const presets = await loadPresets()
+
+    const { chosenPreset } = await prompts(
+      {
+        type: 'select',
+        name: 'chosenPreset',
+        message: 'Pick a preset',
+        choices: presets.map(p => ({ title: p.name, value: p }))
+      },
+      promptOptions
+    )
+
+    const puggle = new Puggle(chosenPreset)
+    await puggle.run(path)
+  }
+
   constructor(preset: Preset) {
     this.preset = preset
   }
@@ -29,7 +46,7 @@ export class Puggle {
 
   async run(initialPath = '.') {
     try {
-      let { targetPath } = await prompts(
+      const { targetPath } = await prompts(
         {
           type: 'text',
           name: 'targetPath',
@@ -39,7 +56,7 @@ export class Puggle {
         promptOptions
       )
 
-      let { projectName } = await prompts(
+      const { projectName } = await prompts(
         {
           type: 'text',
           name: 'projectName',
@@ -65,7 +82,7 @@ export class Puggle {
       for (let plugin of this.preset.plugins) {
         await plugin.extendVirtualFileSystem(root, args)
 
-        let pluginName = formatClassName(plugin, 'Plugin')
+        const pluginName = formatClassName(plugin, 'Plugin')
         pluginVersions[pluginName] = plugin.version
       }
 
@@ -73,7 +90,7 @@ export class Puggle {
         new VConfigFile('puggle.json', VConfigType.json, {
           version: process.env.npm_package_version,
           preset: {
-            name: formatClassName(this.preset, 'Preset'),
+            name: this.preset.title,
             version: this.preset.version
           },
           plugins: pluginVersions
@@ -85,7 +102,6 @@ export class Puggle {
       await root.serialize(join(__dirname, '../test', projectName))
     } catch (error) {
       console.log(error)
-      // console.log(error.message)
     }
   }
 }

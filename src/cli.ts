@@ -2,13 +2,6 @@
 
 import { Puggle } from './Puggle'
 import { trimInlineTemplate } from './utils'
-// import { RobbJNodePreset } from './presets/RobbJNodePreset'
-import { RobbJTsNodePreset } from './presets/RobbJTsNodePreset'
-
-// import { join } from 'path'
-// import { VFile, VDir, VRoot, VIgnoreFile } from './VNode'
-// import * as file from './file'
-// import prompts from 'prompts'
 
 const message = trimInlineTemplate`
   This utility walks you through the creation of a puggle (${
@@ -26,10 +19,7 @@ const message = trimInlineTemplate`
   try {
     console.log(message)
 
-    // let puggle = new Puggle(new RobbJNodePreset())
-    let puggle = new Puggle(new RobbJTsNodePreset())
-
-    await puggle.run()
+    await Puggle.runFromEnvironment(process.argv[2])
   } catch (error) {
     console.log(error.message)
   }

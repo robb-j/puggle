@@ -2,7 +2,13 @@ import { Preset, PluginArgs } from '../types'
 import { VDir, VFile, VIgnoreFile } from '../vnodes'
 import { trimInlineTemplate } from '../utils'
 
-import { JestPlugin, NpmPlugin, PrettierPlugin, EslintPlugin, VPackageJson } from '../plugins'
+import {
+  JestPlugin,
+  NpmPlugin,
+  PrettierPlugin,
+  EslintPlugin,
+  VPackageJson
+} from '../plugins'
 
 const indexJs = (name: string) => trimInlineTemplate`
   //
@@ -52,6 +58,7 @@ const readme = (name: string) => trimInlineTemplate`
 `
 
 export class RobbJNodePreset implements Preset {
+  title = 'robb-j:node'
   version = '0.0.0'
 
   plugins = [
@@ -63,26 +70,30 @@ export class RobbJNodePreset implements Preset {
 
   async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
-    
+
     //
     // Tweak the package.json
     //
     npmPackage.dependencies['dotenv'] = '^7.0.0'
     npmPackage.devDependencies['nodemon'] = '^1.18.10'
-    
+
     npmPackage.values['main'] = 'src/index.js'
-    
+
     npmPackage.scripts['preversion'] = 'npm run test -s'
     npmPackage.scripts['start'] = 'node -r dotenv/config src/index.js'
-    npmPackage.scripts['dev'] = `NODE_ENV=development nodemon -w src -x 'node -r dotenv/config' src/index.js`
-    
+    npmPackage.scripts[
+      'dev'
+    ] = `NODE_ENV=development nodemon -w src -x 'node -r dotenv/config' src/index.js`
+
     //
     // Add extra files
     //
     root.addChild(
       new VFile('README.md', readme(projectName)),
       new VDir('src', [
-        new VDir('__tests__', [new VFile('index.spec.js', indexSpecJs(projectName))]),
+        new VDir('__tests__', [
+          new VFile('index.spec.js', indexSpecJs(projectName))
+        ]),
         new VFile('index.js', indexJs(projectName))
       ]),
       new VFile('.editorconfig', editorconfig()),

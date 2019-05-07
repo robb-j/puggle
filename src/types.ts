@@ -17,7 +17,10 @@ export interface Pluginable {
 }
 
 export interface Preset extends Pluginable {
+  title: string
   plugins: Pluginable[]
 }
 
 export type StringOrStringArray = string | string[]
+
+export type StringKeyed<T = any> = { [idx: string]: T }
