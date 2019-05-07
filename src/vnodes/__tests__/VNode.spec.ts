@@ -1,5 +1,7 @@
 import { VNode, VDir } from '../VNode'
 
+jest.mock('fs')
+
 class SpyNode extends VNode {
   constructor(name: string) {
     super(name)
