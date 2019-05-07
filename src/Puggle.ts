@@ -1,6 +1,6 @@
 import prompts from 'prompts'
 import { VDir, VConfigType, VConfigFile } from './vnodes'
-import { join, relative } from 'path'
+import { join } from 'path'
 import { lastDirectory, loadPresets } from './utils'
 import casex from 'casex'
 import { Preset, PluginClass } from './types'
@@ -110,7 +110,9 @@ export class Puggle {
 
       await this.preset.extendVirtualFileSystem(root, args)
 
-      await root.serialize(join(__dirname, '../test', projectName))
+      await root.serialize(projectName)
+
+      console.log(`Initialized into ${projectName}`)
     } catch (error) {
       console.log(error)
     }
