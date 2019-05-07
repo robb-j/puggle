@@ -18,6 +18,9 @@
     "start": "node dist/cli.js",
     "dev": "node -r ts-node/register src/cli.ts"
   },
+  "files": [
+    "dist"
+  ],
   "bin": {
     "puggle": "./dist/cli.js"
   },
