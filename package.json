@@ -12,7 +12,7 @@
     "lint": "npx tsc --noEmit",
     "test": "jest",
     "coverage": "jest --coverage",
-    "preversion": "npm test -s && npm run readme-toc && npm run build && git add dist && git add README.md",
+    "preversion": "npm test -s && npm run readme-toc && npm run build && git add README.md",
     "readme-toc": "md-toc -i",
     "prettier": "prettier --write '**/*.{js,ts,tsx,json,css,md}'",
     "start": "node dist/cli.js",
