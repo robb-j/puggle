@@ -16,7 +16,7 @@ jobs:
         - ./node_modules
     - run:
         name: test
-        command: npx jest --coverage --coverageReporters=text-lcov | coveralls
+        command: npx jest --coverage --coverageReporters=text-lcov | npx coveralls
     - store_artifacts:
         path: coverage
         prefix: coverage
