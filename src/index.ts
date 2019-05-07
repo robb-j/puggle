@@ -4,6 +4,7 @@
 //
 
 export * from './plugins'
-export * from './presets/RobbJNodePreset'
+export * from './utils'
 export * from './vnodes'
 export * from './Puggle'
+export * from './types'
