@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: circleci/node:10
+    steps:
+    - checkout
+    - restore_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+    - run:
+        name: install-npm-wee
+        command: npm install --no-audit
+    - save_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+        paths:
+        - ./node_modules
+    - run:
+        name: test
+        command: npx jest --coverage --coverageReporters=text-lcov | coveralls
+    - store_artifacts:
+        path: coverage
+        prefix: coverage
+ 
