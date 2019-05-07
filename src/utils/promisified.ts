@@ -12,9 +12,6 @@ export const writeFile = promisify(fs.writeFile)
 /** fs.mkdir but with promises */
 export const mkdir = promisify(fs.mkdir)
 
-/** fs.readdir but with promises */
-export const readdir = promisify(fs.readdir)
-
 /** child_process.exec with promises */
 export const exec = promisify(cp.exec)
 
