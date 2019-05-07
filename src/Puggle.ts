@@ -22,6 +22,10 @@ export class Puggle {
   static async runFromEnvironment(path?: string) {
     const presets = await loadPresets()
 
+    if (presets.length === 0) {
+      throw new Error('No presets found, install them with: npm i -g')
+    }
+
     const { chosenPreset } = await prompts(
       {
         type: 'select',
