@@ -1,6 +1,4 @@
 import Yaml from 'yaml'
-import nestedGet from 'lodash.get'
-import nestedSet from 'lodash.set'
 
 import { trimInlineTemplate } from '../utils'
 import { VFile } from './VFile'
@@ -50,13 +48,5 @@ export class VConfigFile extends VFile {
       case VConfigType.yaml:
         return comment + Yaml.stringify(this.values)
     }
-  }
-
-  read(path: string) {
-    return nestedGet(this.values, path)
-  }
-
-  write(path: string, value: any) {
-    return nestedSet(this.values, path, value)
   }
 }

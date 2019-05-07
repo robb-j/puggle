@@ -1,7 +1,6 @@
 import { removeSurroundingSlashes, mkdir } from '../utils'
 import { join } from 'path'
-
-type StringOrStringArray = string | string[]
+import { StringOrStringArray } from '../types'
 
 /**
  * The base class of virual filesystem nodes, doesn't do very much
@@ -17,14 +16,6 @@ export class VNode {
   }
 
   async serialize(path: string): Promise<void> {}
-
-  getRoot(): VDir | undefined {
-    let node: VNode | undefined = this
-
-    while (node.parent) node = node.parent
-
-    return node instanceof VDir ? node : undefined
-  }
 }
 
 /**

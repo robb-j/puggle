@@ -19,3 +19,5 @@ export interface Pluginable {
 export interface Preset extends Pluginable {
   plugins: Pluginable[]
 }
+
+export type StringOrStringArray = string | string[]
