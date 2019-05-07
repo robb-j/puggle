@@ -1,6 +1,6 @@
 import prompts from 'prompts'
 import { VDir, VConfigType, VConfigFile } from './vnodes'
-import { join } from 'path'
+import { join, relative } from 'path'
 import { lastDirectory, loadPresets } from './utils'
 import casex from 'casex'
 import { Preset, PluginClass } from './types'
@@ -26,17 +26,24 @@ export class Puggle {
       throw new Error('No presets found, install them with: npm i -g')
     }
 
+    let choices = presets.map(p => ({
+      title: p.title,
+      value: p.title
+    }))
+
     const { chosenPreset } = await prompts(
       {
         type: 'select',
         name: 'chosenPreset',
         message: 'Pick a preset',
-        choices: presets.map(p => ({ title: p.name, value: p }))
+        choices
       },
       promptOptions
     )
 
-    const puggle = new Puggle(chosenPreset)
+    let preset = presets.find(p => p.title === chosenPreset)!
+
+    const puggle = new Puggle(preset)
     await puggle.run(path)
   }
 

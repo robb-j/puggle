@@ -1,6 +1,6 @@
-// import Module from 'module'
-import { join, relative } from 'path'
+import { join } from 'path'
 
+import { Preset } from '../types'
 import { exec, glob } from './promisified'
 
 export async function loadPresets() {
@@ -8,20 +8,12 @@ export async function loadPresets() {
 
   let cwd = stdout.trim()
 
-  // const relativeRequire = Module.createRequireFromPath(cwd)
-
   const matches = await glob('*/puggle-preset-*', { cwd })
 
   return Promise.all(
     matches.map(async name => {
-      let path = join(cwd, name)
-
-      // console.log(path)
-      // console.log(require.resolve(path))
-      // console.log(require.resolve.paths(path))
-
-      const Preset = require(path)
-      return new Preset()
+      const SomePreset = require(join(cwd, name))
+      return new SomePreset() as Preset
     })
   )
 }
