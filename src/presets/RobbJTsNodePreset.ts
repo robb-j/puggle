@@ -21,6 +21,10 @@ const indexTs = (name: string) => trimInlineTemplate`
 `
 
 const indexSpecTs = () => trimInlineTemplate`
+  //
+  // An example unit test
+  //
+
   describe('sample', () => {
     it('should pass', () => {
       expect(1 + 1).toBe(2)
@@ -78,7 +82,7 @@ export class RobbJTsNodePreset implements Preset {
     npmPackage.scripts['preversion'] = 'npm run test -s && npm run build'
     npmPackage.scripts['start'] = 'node -r dotenv/config dist/index.js'
     npmPackage.scripts['dev'] =
-      'NODE_ENV=development nodemon -w src -e ts -x "npx ts-node -r dotenv/config" src/index.ts'
+      `NODE_ENV=development nodemon -w src -e ts -x 'npx ts-node -r dotenv/config' src/index.ts`
 
     //
     // Add extra files

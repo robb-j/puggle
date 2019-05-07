@@ -84,7 +84,8 @@ export class Puggle {
 
       await root.serialize(join(__dirname, '../test', projectName))
     } catch (error) {
-      console.log(error.message)
+      console.log(error)
+      // console.log(error.message)
     }
   }
 }

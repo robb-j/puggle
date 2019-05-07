@@ -27,7 +27,6 @@ export const defaultPackage = {
   description: 'Setup with puggle',
   version: '0.0.0',
   private: true,
-  main: 'src/index.js',
   repository: '',
   author: '',
   license: 'MIT',
@@ -102,7 +101,7 @@ export class NpmPlugin implements Pluginable {
       type: 'text',
       name: 'repository',
       message: 'git repository',
-      initial: `${projectName}`
+      initial: `username/${projectName}`
     })
 
     let npmPackage = new VPackageJson()

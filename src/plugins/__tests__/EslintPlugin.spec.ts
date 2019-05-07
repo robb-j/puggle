@@ -58,5 +58,21 @@ describe('EslintPlugin', () => {
       expect(config.values.extends).toContain('prettier')
       expect(config.values.extends).toContain('prettier/standard')
     })
+    
+    it('should add jest the global', async () => {
+      fakedPlugins.add('JestPlugin')
+      
+      await plugin.extendVirtualFileSystem(root, args)
+      
+      let config = root.find('.eslintrc.yml') as VConfigFile
+      
+      expect(config.values.env).toHaveProperty('jest', true)
+    })
+    
+    it('should add a lint script', async () => {
+      await plugin.extendVirtualFileSystem(root, args)
+      
+      expect(pkg.scripts).toHaveProperty('lint')
+    })
   })
 })

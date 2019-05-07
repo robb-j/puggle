@@ -2,6 +2,7 @@ import { VDir, VConfigType, VConfigFile } from '../vnodes'
 import { Pluginable, PluginArgs } from '../types'
 import { VPackageJson } from './NpmPlugin'
 import { PrettierPlugin } from './PrettierPlugin'
+import { JestPlugin } from '.';
 
 export class EslintPlugin implements Pluginable {
   version = '0.0.0'
@@ -27,7 +28,7 @@ export class EslintPlugin implements Pluginable {
       },
       env: {
         node: true
-      },
+      } as any,
       extends: ['standard']
     }
 
@@ -39,8 +40,14 @@ export class EslintPlugin implements Pluginable {
       // Add prettier usage to the config
       conf.extends.push('prettier', 'prettier/standard')
     }
+    
+    // Add jest to the environment
+    if (hasPlugin(JestPlugin)) conf.env.jest = true
 
     // Add the config file
     root.addChild(new VConfigFile('.eslintrc.yml', VConfigType.yaml, conf))
+    
+    // Add a lint script
+    npmPackage.scripts['lint'] = 'eslint src'
   }
 }

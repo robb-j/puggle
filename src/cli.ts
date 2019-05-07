@@ -26,7 +26,7 @@ const message = trimInlineTemplate`
   try {
     console.log(message)
 
-    // let preset = new RobbJNodePreset()
+    // let puggle = new Puggle(new RobbJNodePreset())
     let puggle = new Puggle(new RobbJTsNodePreset())
 
     await puggle.run()
