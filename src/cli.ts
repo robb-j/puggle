@@ -21,6 +21,6 @@ const message = trimInlineTemplate`
 
     await Puggle.runFromEnvironment(process.argv[2])
   } catch (error) {
-    console.log(error.message)
+    console.log(error)
   }
 })()

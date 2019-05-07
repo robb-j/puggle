@@ -1,10 +1,8 @@
-import { join } from 'path'
-
 import { StringKeyed } from '../types'
-import { exec, glob } from './promisified'
 
 export * from './promisified'
 export * from './trimInlineTemplate'
+export * from './loadPresets'
 
 /**
  * Get the last directory in a path
@@ -35,17 +33,4 @@ export function sortObjectKeys<T extends StringKeyed>(input: T): T {
   }
 
   return output
-}
-
-export async function loadPresets() {
-  const { stdout } = await exec('npm root -g')
-
-  let cwd = stdout.trim()
-
-  const matches = await glob('*/puggle-preset-*', { cwd })
-
-  return matches.map(name => {
-    const Preset = require(join(cwd, name))
-    return new Preset()
-  })
 }
