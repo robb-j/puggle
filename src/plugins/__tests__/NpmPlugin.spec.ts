@@ -4,6 +4,9 @@ import { PluginArgs, PluginClass } from '../../types'
 import { VPackageJson } from '../NpmPlugin'
 
 import prompts from 'prompts'
+import fs from 'fs'
+
+jest.mock('fs')
 
 describe('VPackageJson', () => {
   let pkg: VPackageJson
@@ -22,6 +25,26 @@ describe('VPackageJson', () => {
       let dir = new VDir('.', [pkg])
       let result = VPackageJson.getPackageOrFail(dir)
       expect(result).toBe(pkg)
+    })
+  })
+
+  describe('#serialize', () => {
+    it('should write the package to json', async () => {
+      pkg.dependencies['some-module'] = '^1.2.3'
+      pkg.devDependencies['some-dev-module'] = '^4.5.6'
+      pkg.scripts['start'] = 'echo "Hello, World!"'
+
+      await pkg.serialize('/tmp/package.json')
+
+      let [path, rawData] = (fs.writeFile as any).mock.calls[0]
+
+      let data = JSON.parse(rawData)
+
+      expect(path).toMatch(/package.json$/)
+
+      expect(data.dependencies).toHaveProperty('some-module', '^1.2.3')
+      expect(data.devDependencies).toHaveProperty('some-dev-module', '^4.5.6')
+      expect(data.scripts).toHaveProperty('start', 'echo "Hello, World!"')
     })
   })
 })

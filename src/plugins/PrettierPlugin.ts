@@ -13,9 +13,7 @@ export class PrettierPlugin implements Pluginable {
     npmPackage.devDependencies['husky'] = '^1.3.1'
     npmPackage.devDependencies['lint-staged'] = '^8.1.4'
 
-    const matcher = hasPlugin(TypeScriptPlugin)
-      ? '*.{js,json,css,md,ts,tsx}'
-      : '*.{js,json,css,md}'
+    const matcher = '*.{js,json,css,md,ts,tsx}'
 
     //
     // Add a prettier config
