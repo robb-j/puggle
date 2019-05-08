@@ -13,8 +13,8 @@ A CLI for bootstrapping and then also keeping project tooling config up-to-date.
 ## Table of contents
 
 - [What is puggle for?](#what-is-puggle-for)
-- [What's the plan?](#whats-the-plan)
-- [Design Principles](#design-principles)
+  - [What's the plan?](#whats-the-plan)
+  - [Design Principles](#design-principles)
 - [What does it look like?](#what-does-it-look-like)
 - [How does it work](#how-does-it-work)
   - [Preset development](#preset-development)
@@ -26,7 +26,7 @@ A CLI for bootstrapping and then also keeping project tooling config up-to-date.
     - [VIgnoreFile](#vignorefile)
     - [VPackageJson](#vpackagejson)
   - [Preset publishing](#preset-publishing)
-- [Making Plugins](#making-plugins)
+  - [Making Plugins](#making-plugins)
 
 <!-- toc-tail -->
 
@@ -41,16 +41,16 @@ refreshing your memory, updating dependencies and re-testing.
 I made puggle to solve this problem, to quickly bootstrap a project
 with the ability to auto-update it later when the template changes.
 
-## What's the plan?
+### What's the plan?
 
 - [x] Create a virtual file system to construct template projects
 - [x] Use plugins to modify the virtual file system
 - [x] Group plugins and config together to form a preset
 - [x] Create a project from a global puggle/presets
-- [ ] Provide support for versioning presets and plugins
+- [ ] Add support for versioning presets and plugins
 - [ ] Provide a cli to inspect a puggle project and update it
 
-## Design Principles
+### Design Principles
 
 - It should be framework and language agnostic, with implementations built ontop of a common base
 - It should be compose-able through plugins to share functionality
@@ -68,7 +68,7 @@ puggle init .
 
 choose your preset:
 * robb-j:node
-* robb-j:node-cli
+> robb-j:node-cli
 > robb-j:ts-node
 > robb-j:ts-node-cli
 
@@ -319,6 +319,8 @@ A file for ignoring things, e.g. a `gitignore`.
 You pass it a set of rules and a friendly comment to explain the file.
 Also useful for `.npmignore`, `.prettierignore` or others.
 
+This one also works by overriding `#prepareContents` to set the contents dynamically.
+
 ```js
 const { VIgnoreFile } = require('puggle')
 
@@ -385,7 +387,7 @@ npm i -g @robb_j/puggle-preset-test
 puggle
 ```
 
-## Making Plugins
+### Making Plugins
 
 You can, theoretically, do everything you need for a template in a preset.
 But when you have a few you'll want to refactor out commonalities.
