@@ -12,9 +12,21 @@ A CLI for bootstrapping and then also keeping project tooling config up-to-date.
 
 ## Table of contents
 
-- [What is this for?](#what-is-this-for)
+- [What is puggle for?](#what-is-puggle-for)
 - [What's the plan?](#whats-the-plan)
-  - [Principles](#principles)
+- [Design Principles](#design-principles)
+- [What does it look like?](#what-does-it-look-like)
+- [How does it work](#how-does-it-work)
+  - [Preset development](#preset-development)
+  - [Virtual files](#virtual-files)
+    - [VNode](#vnode)
+    - [VDir](#vdir)
+    - [VFile](#vfile)
+    - [VConfigFile](#vconfigfile)
+    - [VIgnoreFile](#vignorefile)
+    - [VPackageJson](#vpackagejson)
+  - [Preset publishing](#preset-publishing)
+- [Making Plugins](#making-plugins)
 
 <!-- toc-tail -->
 
@@ -296,9 +308,7 @@ let opts = { comment: 'My fancy yaml file' }
 let yaml = new VConfigFile(
   'config.yaml',
   VConfigType.yaml,
-  {
-    name: 'geoff'
-  },
+  { name: 'geoff' },
   opts
 )
 ```
