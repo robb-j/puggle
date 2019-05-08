@@ -65,8 +65,6 @@ puggle.json found
 
 Continue: (Y/n)
 
-There are 5 redundant files:
+There are 1 redundant files:
 - mocha.opts
--
-
 ```

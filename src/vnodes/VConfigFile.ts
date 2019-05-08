@@ -7,8 +7,8 @@ import { VFile } from './VFile'
  * The supported types of config files
  */
 export enum VConfigType {
-  json,
-  yaml
+  json = 'json',
+  yaml = 'yaml'
 }
 
 /**
