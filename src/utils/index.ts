@@ -3,6 +3,7 @@ import { StringKeyed } from '../types'
 export * from './promisified'
 export * from './trimInlineTemplate'
 export * from './loadPresets'
+export * from './stringifyVNode'
 
 /**
  * Get the last directory in a path

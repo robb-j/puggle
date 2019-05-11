@@ -7,6 +7,10 @@ type StringMap = {
   [idx: string]: string | undefined
 }
 
+const promptOptions = {
+  onCancel: () => process.exit(1)
+}
+
 export type NPMPackage = {
   [idx: string]: any
 
@@ -82,27 +86,33 @@ export class NpmPlugin implements Pluginable {
   version = '0.0.0'
 
   async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
-    let { packageName, packageInfo } = await prompts([
-      {
-        type: 'text',
-        name: 'packageName',
-        message: 'package name',
-        initial: projectName
-      },
-      {
-        type: 'text',
-        name: 'packageInfo',
-        message: 'description',
-        initial: 'Setup with puggle'
-      }
-    ])
+    let { packageName, packageInfo } = await prompts(
+      [
+        {
+          type: 'text',
+          name: 'packageName',
+          message: 'package name',
+          initial: projectName
+        },
+        {
+          type: 'text',
+          name: 'packageInfo',
+          message: 'description',
+          initial: 'Setup with puggle'
+        }
+      ],
+      promptOptions
+    )
 
-    let { repository } = await prompts({
-      type: 'text',
-      name: 'repository',
-      message: 'git repository',
-      initial: `username/${projectName}`
-    })
+    let { repository } = await prompts(
+      {
+        type: 'text',
+        name: 'repository',
+        message: 'git repository',
+        initial: `username/${projectName}`
+      },
+      promptOptions
+    )
 
     let npmPackage = new VPackageJson()
     npmPackage.values.name = packageName
