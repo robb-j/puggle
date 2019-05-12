@@ -1,6 +1,7 @@
 import { VNode, VDir } from '../VNode'
+import { mkdir } from '../../utils/promisified'
 
-jest.mock('fs')
+jest.mock('../../utils/promisified')
 
 class SpyNode extends VNode {
   constructor(name: string) {
@@ -89,6 +90,17 @@ describe('VDir', () => {
   })
 
   describe('#serialize', () => {
+    it('should create the directory', async () => {
+      let dir = new VDir('dir')
+
+      await dir.serialize('root')
+
+      expect(mkdir).toBeCalledWith(
+        'root/dir',
+        expect.objectContaining({ recursive: true })
+      )
+    })
+
     it("should serialize children under the parent's path", async () => {
       let node = new SpyNode('spy_node')
       let dir = new VDir('dir', [node])

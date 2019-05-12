@@ -1,12 +1,12 @@
 import { NpmPlugin } from '../NpmPlugin'
 import { VDir } from '../../vnodes'
 import { PluginArgs, PluginClass } from '../../types'
+import { writeFile } from '../../utils/promisified'
 import { VPackageJson } from '../NpmPlugin'
 
 import prompts from 'prompts'
-import fs from 'fs'
 
-jest.mock('fs')
+jest.mock('../../utils/promisified')
 
 describe('VPackageJson', () => {
   let pkg: VPackageJson
@@ -36,7 +36,7 @@ describe('VPackageJson', () => {
 
       await pkg.serialize('/tmp/package.json')
 
-      let [path, rawData] = (fs.writeFile as any).mock.calls[0]
+      let [path, rawData] = (writeFile as any).mock.calls[0]
 
       let data = JSON.parse(rawData)
 

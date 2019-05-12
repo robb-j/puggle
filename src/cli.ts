@@ -4,6 +4,7 @@ import { Puggle } from './Puggle'
 import { trimInlineTemplate } from './utils'
 import yargs from 'yargs'
 
+// Use require to avoid it being compilled in
 const packageJson = require('../package.json')
 
 const initMessage = trimInlineTemplate`

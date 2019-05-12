@@ -1,7 +1,8 @@
 import { VFile } from '../VFile'
-import fs from 'fs'
 
-jest.mock('fs')
+import { writeFile } from '../../utils'
+
+jest.mock('../../utils/promisified')
 
 describe('VFile', () => {
   describe('#constructor', () => {
@@ -24,11 +25,7 @@ describe('VFile', () => {
 
       await file.serialize('root')
 
-      expect(fs.writeFile).toBeCalledWith(
-        'root/file',
-        'hello world',
-        expect.any(Function)
-      )
+      expect(writeFile).toBeCalledWith('root/file', 'hello world')
     })
   })
 })

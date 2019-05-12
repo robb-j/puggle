@@ -27,7 +27,7 @@ export function stringifyVNode(node: VNode, depth = 0): string {
 
     return `${node.name}/ ${chalk.gray(
       node.constructor.name
-    )} \n${stringifiedChildren}`
+    )}\n${stringifiedChildren}`
   }
 
   //
