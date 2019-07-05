@@ -1,5 +1,6 @@
-import { VNode, VDir } from '../VNode'
-import { mkdir } from '../../utils/promisified'
+import { mocked } from 'ts-jest/utils'
+import { VNode, VDir, findFileConflicts } from '../VNode'
+import { mkdir, readdir } from '../../utils/promisified'
 
 jest.mock('../../utils/promisified')
 
@@ -109,5 +110,26 @@ describe('VDir', () => {
 
       expect(node.serialize).toHaveBeenCalledWith('root/dir')
     })
+  })
+})
+
+describe('#findFileConflicts', () => {
+  it('should return vnodes that conflict with files', async () => {
+    mocked(readdir as any).mockResolvedValueOnce([
+      'script.js',
+      'src',
+      'some.css'
+    ])
+    mocked(readdir as any).mockResolvedValueOnce(['index.js'])
+
+    let dir = new VDir('root', [
+      new VNode('script.js'),
+      new VDir('src', [new VNode('index.js')])
+    ])
+
+    let conflicts = await findFileConflicts('.', dir)
+
+    expect(conflicts).toContain('root/script.js')
+    expect(conflicts).toContain('root/src/index.js')
   })
 })

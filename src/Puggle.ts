@@ -1,5 +1,5 @@
 import prompts from 'prompts'
-import { VDir, VConfigType, VConfigFile, VNode } from './vnodes'
+import { VDir, VConfigType, VConfigFile, findFileConflicts } from './vnodes'
 import { lastDirectory, loadPresets, stringifyVNode } from './utils'
 import casex from 'casex'
 import chalk from 'chalk'
@@ -115,6 +115,17 @@ export class Puggle {
     )
 
     await this.preset.extendVirtualFileSystem(root, args)
+
+    let conflicts = await findFileConflicts('.', root)
+
+    if (conflicts.length > 0) {
+      console.log(
+        chalk.bold.red('ERROR'),
+        'There are conflicts with existing files:'
+      )
+      for (let path of conflicts) console.log(chalk.red('⨉'), path)
+      process.exit(1)
+    }
 
     if (dryRun) {
       console.log(stringifyVNode(root))

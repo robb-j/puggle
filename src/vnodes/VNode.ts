@@ -1,4 +1,4 @@
-import { removeSurroundingSlashes, mkdir } from '../utils'
+import { removeSurroundingSlashes, mkdir, readdir } from '../utils'
 import { join } from 'path'
 import { StringOrStringArray } from '../types'
 
@@ -58,10 +58,50 @@ export class VDir extends VNode {
     }
   }
 
+  /** Write a directory and its children to the filesystem */
   async serialize(path: string) {
     const dir = join(path, this.name)
     await mkdir(dir, { recursive: true })
 
     await Promise.all(this.children.map(child => child.serialize(dir)))
   }
+}
+
+/** Recursively look for virtual nodes that conflict with actual files */
+export async function findFileConflicts(basePath: string, directory: VDir) {
+  const path = join(basePath, directory.name)
+
+  let contents: Set<string>
+
+  try {
+    contents = new Set(await readdir(path))
+  } catch (error) {
+    // If we failed to read the base directory, there can be no conflicts
+    return []
+  }
+
+  // A fuzzy test for VDirs
+  // -> Takes into account a VDir from another package may fail an "instanceof"
+  const isDir = (obj: any) => obj.constructor.name === 'VDir'
+
+  // Create an array to put conflicting files in
+  let conflits = new Array<string>()
+
+  // Look through the directory's children to find conflicts
+  for (let child of directory.children) {
+    if (isDir(child)) {
+      //
+      // If the child is a directory, recurse and look at it's children
+      //
+      conflits.push(...(await findFileConflicts(path, child as VDir)))
+    } else if (contents.has(child.name)) {
+      //
+      // If it isn't a directory, check if the file exists
+      //
+      conflits.push(join(path, child.name))
+    }
+  }
+
+  // Return the conflics, if there were any
+  return conflits
 }
