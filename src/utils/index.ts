@@ -24,12 +24,12 @@ export const removeSurroundingSlashes = (input: string) => {
  * Sort an object's keys alphabetically
  */
 export function sortObjectKeys<T extends StringKeyed>(input: T): T {
-  const output: T = {} as any
+  const output = {} as any
 
   let keys = Object.keys(input)
   keys.sort()
 
-  for (const key of keys) {
+  for (let key of keys) {
     output[key] = input[key]
   }
 
