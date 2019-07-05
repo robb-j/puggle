@@ -18,7 +18,8 @@ describe('JestPlugin', () => {
     args = {
       hasPlugin: (c: PluginClass) => fakedPlugins.has(c.name),
       targetPath: '/tmp',
-      projectName: 'test_project'
+      projectName: 'test_project',
+      puggle: {} as any
     }
   })
 

@@ -1,10 +1,18 @@
 import { NpmPlugin } from '../NpmPlugin'
 import { VDir } from '../../vnodes'
-import { PluginArgs, PluginClass } from '../../types'
+import { PluginArgs, PluginClass, Preset } from '../../types'
 import { writeFile } from '../../utils/promisified'
 import { VPackageJson } from '../NpmPlugin'
 
 import prompts from 'prompts'
+import { Puggle } from '../../Puggle'
+
+class MockPreset implements Preset {
+  title = 'mock-preset'
+  plugins = []
+  version = 'v1'
+  async extendVirtualFileSystem(root: VDir, args: PluginArgs) {}
+}
 
 jest.mock('../../utils/promisified')
 
@@ -62,7 +70,8 @@ describe('NpmPlugin', () => {
     args = {
       hasPlugin: (c: PluginClass) => fakedPlugins.has(c.name),
       targetPath: '/tmp',
-      projectName: 'test_project'
+      projectName: 'test_project',
+      puggle: new Puggle(new MockPreset())
     }
 
     prompts.inject([

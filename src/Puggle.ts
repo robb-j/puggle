@@ -69,7 +69,7 @@ export class Puggle {
     paramGroup: string,
     questions: Array<prompts.PromptObject<T>>
   ): Promise<prompts.Answers<T>> {
-    let config = this.params.get(paramGroup)
+    let config = this.params.get(paramGroup) || {}
 
     let missing = questions.filter(
       question => config[question.name as string] === undefined
