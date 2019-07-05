@@ -64,7 +64,7 @@ export class Puggle {
     return this.preset.plugins.some(plugin => plugin instanceof pluginClass)
   }
 
-  async run({ path = '', dryRun = false }: RunOptions) {
+  async run({ path = '.', dryRun = false }: RunOptions) {
     const { targetPath } = await prompts(
       {
         type: 'text',
@@ -85,7 +85,7 @@ export class Puggle {
       promptOptions
     )
 
-    const root = new VDir(path, [])
+    const root = new VDir(targetPath, [])
     const args = {
       projectName,
       targetPath,
