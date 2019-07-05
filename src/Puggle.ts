@@ -173,6 +173,11 @@ export class Puggle {
   async upgrade({ path = '.', dryRun = false }: RunOptions) {
     // Find a local puggle.json or fail
     // Ensure the same preset is available
-    // See if a new version of the preset is available
+    // Do nothing if the the preset version hasn't changed
+    // Find plugins that have been removed
+    // Find the presets that have been added
+    // Find the presets that have been updated
+    // See if the upgrade can be performed and prompt the user
+    // Update the fs
   }
 }
