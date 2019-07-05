@@ -4,7 +4,7 @@ import { VPackageJson } from './NpmPlugin'
 import { TypeScriptPlugin } from './TypeScriptPlugin'
 
 export class PrettierPlugin implements Pluginable {
-  version = '0.0.0'
+  version = '0.1.0'
 
   async extendVirtualFileSystem(root: VDir, { hasPlugin }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)

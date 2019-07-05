@@ -1,6 +1,5 @@
 import { VDir, VConfigFile, VConfigType } from '../vnodes'
 import { Pluginable, PluginArgs } from '../types'
-import prompts from 'prompts'
 import { sortObjectKeys } from '../utils'
 
 type StringMap = {
@@ -83,36 +82,35 @@ export class VPackageJson extends VConfigFile {
 }
 
 export class NpmPlugin implements Pluginable {
-  version = '0.0.0'
+  version = '0.1.0'
 
-  async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
-    let { packageName, packageInfo } = await prompts(
-      [
-        {
-          type: 'text',
-          name: 'packageName',
-          message: 'package name',
-          initial: projectName
-        },
-        {
-          type: 'text',
-          name: 'packageInfo',
-          message: 'description',
-          initial: 'Setup with puggle'
-        }
-      ],
-      promptOptions
-    )
+  async extendVirtualFileSystem(
+    root: VDir,
+    { projectName, puggle }: PluginArgs
+  ) {
+    let { packageName, packageInfo } = await puggle.askQuestions('npm', [
+      {
+        type: 'text',
+        name: 'packageName',
+        message: 'package name',
+        initial: projectName
+      },
+      {
+        type: 'text',
+        name: 'packageInfo',
+        message: 'description',
+        initial: 'Setup with puggle'
+      }
+    ])
 
-    let { repository } = await prompts(
+    let { repository } = await puggle.askQuestions('npm', [
       {
         type: 'text',
         name: 'repository',
         message: 'git repository',
         initial: `username/${projectName}`
-      },
-      promptOptions
-    )
+      }
+    ])
 
     let npmPackage = new VPackageJson()
     npmPackage.values.name = packageName
@@ -120,5 +118,11 @@ export class NpmPlugin implements Pluginable {
     npmPackage.values.repository = repository
 
     root.addChild(npmPackage)
+
+    puggle.storePluginParams('npm', {
+      packageName,
+      packageInfo,
+      repository
+    })
   }
 }

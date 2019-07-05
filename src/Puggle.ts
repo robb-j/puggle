@@ -3,7 +3,7 @@ import { VDir, VConfigType, VConfigFile, findFileConflicts } from './vnodes'
 import { lastDirectory, loadPresets, stringifyVNode } from './utils'
 import casex from 'casex'
 import chalk from 'chalk'
-import { Preset, PluginClass } from './types'
+import { Preset, PluginClass, StringKeyed, PuggleConfig } from './types'
 
 export type RunOptions = {
   path?: string
@@ -23,6 +23,7 @@ function formatClassName(object: any, extension: string) {
 
 export class Puggle {
   preset: Preset
+  params = new Map<string, any>()
 
   static async runFromEnvironment(options: RunOptions) {
     try {
@@ -64,6 +65,25 @@ export class Puggle {
     return this.preset.plugins.some(plugin => plugin instanceof pluginClass)
   }
 
+  async askQuestions<T extends string = string>(
+    paramGroup: string,
+    questions: Array<prompts.PromptObject<T>>
+  ): Promise<prompts.Answers<T>> {
+    let config = this.params.get(paramGroup)
+
+    let missing = questions.filter(
+      question => config[question.name as string] === undefined
+    )
+
+    let rest = await prompts(missing, promptOptions)
+
+    return { ...config, ...(rest as any) }
+  }
+
+  storePluginParams(paramGroup: string, config: any) {
+    this.params.set(paramGroup, config)
+  }
+
   async run({ path = '.', dryRun = false }: RunOptions) {
     const { targetPath } = await prompts(
       {
@@ -93,25 +113,17 @@ export class Puggle {
       hasPlugin: (k: PluginClass) => this.hasPlugin(k)
     }
 
-    let pluginVersions: { [idx: string]: string } = {}
-
     // Give each plugin a chance to setup
     for (let plugin of this.preset.plugins) {
       await plugin.extendVirtualFileSystem(root, args)
-
-      const pluginName = formatClassName(plugin, 'Plugin')
-      pluginVersions[pluginName] = plugin.version
     }
 
     root.addChild(
-      new VConfigFile('puggle.json', VConfigType.json, {
-        version: process.env.npm_package_version,
-        preset: {
-          name: this.preset.title,
-          version: this.preset.version
-        },
-        plugins: pluginVersions
-      })
+      new VConfigFile(
+        'puggle.json',
+        VConfigType.json,
+        this.generatePuggleConfig()
+      )
     )
 
     await this.preset.extendVirtualFileSystem(root, args)
@@ -133,5 +145,34 @@ export class Puggle {
       await root.serialize('.')
       console.log(`Initialized into ${projectName}`)
     }
+  }
+
+  generatePuggleConfig() {
+    let config: PuggleConfig = {
+      version: process.env.npm_package_version!,
+      preset: {
+        name: this.preset.title,
+        version: this.preset.version
+      },
+      plugins: {},
+      params: {}
+    }
+
+    for (let plugin of this.preset.plugins) {
+      const pluginName = formatClassName(plugin, 'Plugin')
+      config.plugins[pluginName] = plugin.version
+    }
+
+    this.params.forEach((params, groupName) => {
+      config.params[groupName] = params
+    })
+
+    return config
+  }
+
+  async upgrade({ path = '.', dryRun = false }: RunOptions) {
+    // Find a local puggle.json or fail
+    // Ensure the same preset is available
+    // See if a new version of the preset is available
   }
 }

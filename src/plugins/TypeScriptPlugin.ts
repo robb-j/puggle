@@ -29,7 +29,7 @@ const baseTsconfig = {
 }
 
 export class TypeScriptPlugin implements Pluginable {
-  version = '0.0.0'
+  version = '0.1.0'
 
   async extendVirtualFileSystem(root: VDir, args: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
