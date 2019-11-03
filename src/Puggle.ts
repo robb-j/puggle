@@ -3,11 +3,14 @@ import { VDir, VConfigType, VConfigFile, findFileConflicts } from './vnodes'
 import { lastDirectory, loadPresets, stringifyVNode } from './utils'
 import casex from 'casex'
 import chalk from 'chalk'
-import { Preset, PluginClass, StringKeyed, PuggleConfig } from './types'
+import { Preset, PluginClass, PuggleConfig } from './types'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
 export type RunOptions = {
   path?: string
   dryRun?: boolean
+  presets?: Preset[]
 }
 
 const promptOptions = {
@@ -25,9 +28,9 @@ export class Puggle {
   preset: Preset
   params = new Map<string, any>()
 
-  static async runFromEnvironment(options: RunOptions) {
+  static async initFromEnvironment(options: RunOptions) {
     try {
-      const presets = await loadPresets()
+      const presets = options.presets || (await loadPresets())
 
       if (presets.length === 0) {
         throw new Error('No presets found, install them with: npm i -g')
@@ -51,7 +54,31 @@ export class Puggle {
       let preset = presets.find(p => p.title === chosenPreset)!
 
       const puggle = new Puggle(preset)
-      await puggle.run(options)
+      await puggle.init(options)
+    } catch (error) {
+      console.log(chalk.red('⨉'), error.message)
+    }
+  }
+
+  static async updateFromEnvironment(options: RunOptions) {
+    try {
+      const presets = options.presets || (await loadPresets())
+
+      if (presets.length === 0) {
+        throw new Error('No presets found, install them with: npm i -g')
+      }
+
+      let confPath = join(options.path || '.', 'puggle.json')
+      let config: PuggleConfig = JSON.parse(readFileSync(confPath, 'utf8'))
+
+      let preset = presets.find(p => p.title === config.preset.name)
+
+      if (!preset) {
+        throw new Error(`Preset ${config.preset.name} is no longer available`)
+      }
+
+      const puggle = new Puggle(preset)
+      await puggle.update(config, options)
     } catch (error) {
       console.log(chalk.red('⨉'), error.message)
     }
@@ -84,7 +111,7 @@ export class Puggle {
     this.params.set(paramGroup, config)
   }
 
-  async run({ path = '.', dryRun = false }: RunOptions) {
+  async init({ path = '.', dryRun = false }: RunOptions) {
     const { targetPath } = await prompts(
       {
         type: 'text',
@@ -170,14 +197,11 @@ export class Puggle {
     return config
   }
 
-  async upgrade({ path = '.', dryRun = false }: RunOptions) {
-    // Find a local puggle.json or fail
-    // Ensure the same preset is available
-    // Do nothing if the the preset version hasn't changed
-    // Find plugins that have been removed
-    // Find the presets that have been added
-    // Find the presets that have been updated
-    // See if the upgrade can be performed and prompt the user
-    // Update the fs
+  async update(
+    config: PuggleConfig,
+    { path = '.', dryRun = false }: RunOptions
+  ) {
+    console.log(this.preset)
+    console.log(config)
   }
 }

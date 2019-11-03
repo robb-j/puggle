@@ -8,9 +8,7 @@ import yargs from 'yargs'
 const packageJson = require('../package.json')
 
 const initMessage = trimInlineTemplate`
-  This utility walks you through the creation of a puggle (${
-    packageJson.version
-  }) project.
+  This utility walks you through the creation of a puggle (${packageJson.version}) project.
   
   It will initialize a new project in the directory of your choosing.
 
@@ -38,7 +36,7 @@ yargs
     yargs => {
       console.log(initMessage)
 
-      Puggle.runFromEnvironment({
+      Puggle.initFromEnvironment({
         path: yargs.path,
         dryRun: yargs.dryrun
       })
@@ -52,5 +50,39 @@ yargs
       console.log('Coming soon ...')
     }
   )
+
+if (process.env.NODE_ENV === 'development') {
+  const { TestPreset } = require('./utils/TestPreset')
+
+  yargs.command(
+    'test:init [path]',
+    'Run the cli with a test preset',
+    yargs =>
+      yargs
+        .positional('path', { type: 'string' })
+        .option('dryrun', { type: 'boolean', default: false }),
+    async argv => {
+      console.log(initMessage)
+
+      let p = new Puggle(new TestPreset())
+      await p.init(argv)
+    }
+  )
+
+  yargs.command(
+    'test:update [path]',
+    'Run the cli with a test preset',
+    yargs =>
+      yargs
+        .positional('path', { type: 'string' })
+        .option('dryrun', { type: 'boolean', default: false }),
+    async argv => {
+      await Puggle.updateFromEnvironment({
+        ...argv,
+        presets: [new TestPreset()]
+      })
+    }
+  )
+}
 
 yargs.parse()

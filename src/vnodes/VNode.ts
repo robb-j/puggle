@@ -16,6 +16,10 @@ export class VNode {
   }
 
   async serialize(path: string): Promise<void> {}
+
+  async patchNode(path: string): Promise<void> {
+    throw new Error('Not implemented')
+  }
 }
 
 /**
@@ -64,6 +68,13 @@ export class VDir extends VNode {
     await mkdir(dir, { recursive: true })
 
     await Promise.all(this.children.map(child => child.serialize(dir)))
+  }
+
+  async patchNode(path: string): Promise<void> {
+    const dir = join(path, this.name)
+    await mkdir(dir, { recursive: true })
+
+    await Promise.all(this.children.map(child => child.patchNode(dir)))
   }
 }
 

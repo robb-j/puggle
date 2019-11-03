@@ -29,10 +29,16 @@ export type StringKeyed<T = any> = { [idx: string]: T }
 
 export type PuggleConfig = {
   version: string
+  projectName: string
   preset: {
     name: string
     version: string
   }
   plugins: StringKeyed<string>
   params: StringKeyed<any>
+}
+
+export enum PatchMode {
+  persist,
+  placeholder
 }

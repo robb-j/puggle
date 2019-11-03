@@ -14,13 +14,28 @@ export class VIgnoreFile extends VFile {
     this.rules = rules
   }
 
-  prepareContents() {
+  render(description: string, rules: string[]) {
     return trimInlineTemplate`
-      #
-      # ${this.description}
-      #
-      
-      ${this.rules.join('\n')}
-    `
+    #
+    # ${description}
+    #
+    
+    ${rules.join('\n')}
+  `
+  }
+
+  prepareContents() {
+    return this.render(this.description, this.rules)
+  }
+
+  patchFile(data: string) {
+    const rules = new Set<string>()
+
+    for (let line of data.split('\n')) {
+      if (line.trimLeft().startsWith('#')) continue
+      rules.add(line)
+    }
+
+    return this.render(this.description, Array.from(rules))
   }
 }

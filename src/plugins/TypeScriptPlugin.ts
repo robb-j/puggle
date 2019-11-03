@@ -34,9 +34,11 @@ export class TypeScriptPlugin implements Pluginable {
   async extendVirtualFileSystem(root: VDir, args: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
 
-    npmPackage.devDependencies['typescript'] = '^3.4.1'
-    npmPackage.devDependencies['ts-node'] = '^8.0.3'
-    npmPackage.devDependencies['@types/node'] = '^11.13.0'
+    await npmPackage.addDevDependencies({
+      typescript: '^3.4.1',
+      'ts-node': '^8.0.3',
+      '@types/node': '^11.13.0'
+    })
 
     root.addChild(
       new VConfigFile('tsconfig.json', VConfigType.json, { ...baseTsconfig })

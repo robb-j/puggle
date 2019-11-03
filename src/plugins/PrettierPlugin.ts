@@ -9,9 +9,11 @@ export class PrettierPlugin implements Pluginable {
   async extendVirtualFileSystem(root: VDir, { hasPlugin }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
 
-    npmPackage.devDependencies['prettier'] = '^1.16.4'
-    npmPackage.devDependencies['husky'] = '^1.3.1'
-    npmPackage.devDependencies['lint-staged'] = '^8.1.4'
+    await npmPackage.addDevDependencies({
+      prettier: '^1.16.4',
+      husky: '^1.3.1',
+      'lint-staged': '^8.1.4'
+    })
 
     const matcher = '*.{js,json,css,md,ts,tsx}'
 

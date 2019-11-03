@@ -1,6 +1,8 @@
 import { VDir, VConfigFile, VConfigType } from '../vnodes'
 import { Pluginable, PluginArgs } from '../types'
 import { sortObjectKeys } from '../utils'
+import got from 'got'
+import semver from 'semver'
 
 type StringMap = {
   [idx: string]: string | undefined
@@ -9,6 +11,8 @@ type StringMap = {
 const promptOptions = {
   onCancel: () => process.exit(1)
 }
+
+const REGISTRY_URL = 'https://registry.npmjs.org/'
 
 export type NPMPackage = {
   [idx: string]: any
@@ -26,8 +30,8 @@ export type NPMPackage = {
 }
 
 export const defaultPackage = {
-  name: 'my-puggle-project',
-  description: 'Setup with puggle',
+  name: '',
+  description: '',
   version: '0.0.0',
   private: true,
   repository: '',
@@ -67,6 +71,41 @@ export class VPackageJson extends VConfigFile {
     return pkg
   }
 
+  static async getDependencies(dependencies: StringMap) {
+    const promises = Object.keys(dependencies).map(async key => {
+      return {
+        [key]: await this.getVersion(key, dependencies[key]!)
+      }
+    })
+
+    const versions = await Promise.all(promises)
+
+    return versions.reduce((map, dep) => Object.assign(map, dep), {})
+  }
+
+  static async getVersion(
+    packageName: string,
+    semverRange: string
+  ): Promise<string> {
+    const npmPackage = await got(REGISTRY_URL + packageName, { json: true })
+
+    const allMatches = Object.keys(npmPackage.body.versions).filter(version =>
+      semver.satisfies(version, semverRange)
+    )
+
+    if (allMatches.length === 0) {
+      throw new Error()
+    }
+
+    allMatches.sort((a, b) => {
+      if (semver.eq(a, b)) return 0
+      else if (semver.gt(a, b)) return -1
+      else return 1
+    })
+
+    return allMatches[0]
+  }
+
   constructor() {
     super('package.json', VConfigType.json, null)
     this.values = { ...defaultPackage }
@@ -78,6 +117,20 @@ export class VPackageJson extends VConfigFile {
     this.values.scripts = sortObjectKeys(this.values.scripts)
 
     return super.serialize(path)
+  }
+
+  async addDependencies(dependencies: StringMap) {
+    Object.assign(
+      this.dependencies,
+      await VPackageJson.getDependencies(dependencies)
+    )
+  }
+
+  async addDevDependencies(dependencies: StringMap) {
+    Object.assign(
+      this.devDependencies,
+      await VPackageJson.getDependencies(dependencies)
+    )
   }
 }
 
@@ -108,7 +161,7 @@ export class NpmPlugin implements Pluginable {
         type: 'text',
         name: 'repository',
         message: 'git repository',
-        initial: `username/${projectName}`
+        initial: ''
       }
     ])
 

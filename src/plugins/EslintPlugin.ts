@@ -10,8 +10,7 @@ export class EslintPlugin implements Pluginable {
   async extendVirtualFileSystem(root: VDir, { hasPlugin }: PluginArgs) {
     let npmPackage = VPackageJson.getPackageOrFail(root)
 
-    // Add required eslint dependencies
-    Object.assign(npmPackage.devDependencies, {
+    await npmPackage.addDevDependencies({
       eslint: '^5.14.0',
       'eslint-config-standard': '^12.0.0',
       'eslint-plugin-import': '^2.16.0',
@@ -35,7 +34,9 @@ export class EslintPlugin implements Pluginable {
     // Tweak ourself if prettier is also being used
     if (hasPlugin(PrettierPlugin)) {
       // Add the eslint-config-prettier extension
-      npmPackage.devDependencies['eslint-config-prettier'] = '^4.0.0'
+      await npmPackage.addDevDependencies({
+        'eslint-config-prettier': '^4.0.0'
+      })
 
       // Add prettier usage to the config
       conf.extends.push('prettier', 'prettier/standard')

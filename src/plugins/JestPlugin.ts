@@ -18,8 +18,10 @@ export class JestPlugin implements Pluginable {
         testPathIgnorePatterns: ['/node_modules/', '/dist/']
       }
 
-      npmPackage.devDependencies['ts-jest'] = '^24.0.1'
-      npmPackage.devDependencies['@types/jest'] = '^24.0.11'
+      await npmPackage.addDevDependencies({
+        'ts-jest': '^24.0.1',
+        '@types/jest': '^24.0.11'
+      })
     }
 
     npmPackage.scripts['test'] = 'jest'
