@@ -1,9 +1,6 @@
-import { VDir, VIgnoreFile, VFile } from '../vnodes'
-import { Pluginable, PluginArgs, PatchMode } from '../types'
+import { VIgnoreFile, VFile } from '../vnodes'
+import { Plugin, PatchStrategy } from '../types'
 import { trimInlineTemplate } from '../utils'
-import { TypeScriptPlugin } from './TypeScriptPlugin'
-import { NpmPlugin } from './NpmPlugin'
-import { JestPlugin } from './JestPlugin'
 
 // .dockerignore
 // Dockerfile depending
@@ -43,29 +40,24 @@ const tsDockerfile = trimInlineTemplate`
   CMD [ "npm", "start", "-s" ]
 `
 
-export class DockerPlugin implements Pluginable {
-  version = '0.0.0'
+export const dockerPlugin: Plugin = {
+  name: 'docker',
+  version: '0.0.0',
 
-  async extendVirtualFileSystem(root: VDir, { hasPlugin }: PluginArgs) {
-    if (!hasPlugin(NpmPlugin)) {
+  async apply(root, { hasPlugin }) {
+    if (!hasPlugin('npm')) {
       throw new Error('DockerPlugin can only build node docker images')
     }
 
-    let dockerfile: string
-    if (hasPlugin(TypeScriptPlugin)) {
-      dockerfile = tsDockerfile
-    } else {
-      dockerfile = jsDockerfile
-    }
+    let dockerfile = hasPlugin('typescript') ? tsDockerfile : jsDockerfile
 
-    let ignoreRules = ['*.env', '.DS_Store']
+    let ignoreRules = ['*.env', '.DS_Store', 'node_modules']
 
-    if (hasPlugin(NpmPlugin)) ignoreRules.push('node_modules')
-    if (hasPlugin(JestPlugin)) ignoreRules.push('coverage')
-    if (hasPlugin(TypeScriptPlugin)) ignoreRules.push('dist')
+    if (hasPlugin('jest')) ignoreRules.push('coverage')
+    if (hasPlugin('typescript')) ignoreRules.push('dist')
 
     root.addChild(
-      new VFile('Dockerfile', dockerfile, PatchMode.placeholder),
+      new VFile('Dockerfile', dockerfile, PatchStrategy.placeholder),
       new VIgnoreFile(
         '.dockerignore',
         'Files to ignore from the docker daemon',

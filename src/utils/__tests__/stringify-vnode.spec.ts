@@ -1,4 +1,4 @@
-import { stringifyVNode } from '../stringifyVNode'
+import { stringifyVNode } from '../stringify-vnode'
 import { VNode, VDir } from '../../vnodes'
 import strip from 'strip-ansi'
 

@@ -1,4 +1,6 @@
-### Using the cli
+# Using the cli
+
+> This is a [design doc](/design/README.md)
 
 ```bash
 npm i -g puggle puggle-generator-robbj-nodejs

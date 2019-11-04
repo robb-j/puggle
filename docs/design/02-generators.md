@@ -1,5 +1,7 @@
 # Generators
 
+> This is a [design doc](/design/README.md)
+
 Presets for a specific project setup
 
 ```ts

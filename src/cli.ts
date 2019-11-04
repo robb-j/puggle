@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Puggle } from './Puggle'
+import { puggle } from './puggle'
 import { trimInlineTemplate } from './utils'
 import yargs from 'yargs'
 

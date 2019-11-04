@@ -1,14 +1,16 @@
-import { VFile } from '../VFile'
+import { VFile } from '../vfile'
 
-import { writeFile } from '../../utils'
+import { writeFile } from 'fs-extra'
+import { PatchStrategy } from '../../types'
 
-jest.mock('../../utils/promisified')
+jest.mock('fs-extra')
 
 describe('VFile', () => {
   describe('#constructor', () => {
-    it('should store the contents', () => {
-      let file = new VFile('file', 'hello world')
+    it('should store the contents and strategy', () => {
+      let file = new VFile('file', 'hello world', PatchStrategy.placeholder)
       expect(file.contents).toBe('hello world')
+      expect(file.strategy).toBe(PatchStrategy.placeholder)
     })
   })
 
@@ -19,11 +21,11 @@ describe('VFile', () => {
     })
   })
 
-  describe('#serialize', () => {
+  describe('#writeToFile', () => {
     it('should write the file to that path', async () => {
       let file = new VFile('file', 'hello world')
 
-      await file.serialize('root')
+      await file.writeToFile('root')
 
       expect(writeFile).toBeCalledWith('root/file', 'hello world')
     })

@@ -1,7 +1,8 @@
-import { VNode } from './VNode'
-import { writeFile } from '../utils'
-import { PatchMode } from '../types'
 import { join } from 'path'
+import { writeFile } from 'fs-extra'
+
+import { VNode } from './vnode'
+import { PatchStrategy } from '../types'
 
 /**
  * A virtual file
@@ -11,26 +12,30 @@ import { join } from 'path'
  */
 export class VFile extends VNode {
   contents: string
-  patch: PatchMode
+  strategy: PatchStrategy
 
-  constructor(name: string, contents: string = '', patch = PatchMode.persist) {
+  constructor(
+    name: string,
+    contents: string = '',
+    strategy = PatchStrategy.persist
+  ) {
     super(name)
     this.contents = contents
-    this.patch = patch
+    this.strategy = strategy
   }
 
   prepareContents(): string {
     return this.contents
   }
 
-  serialize(path: string) {
-    // TODO: Merge logic ...
-    return writeFile(join(path, this.name), this.prepareContents())
+  async writeToFile(basePath: string) {
+    const path = join(basePath, this.name)
+    return writeFile(path, this.prepareContents())
   }
 
-  async patchNode(path: string) {
-    if (this.patch === PatchMode.persist) {
-      return this.serialize(path)
+  async patchFile(basePath: string) {
+    if (this.strategy === PatchStrategy.persist) {
+      return this.writeToFile(basePath)
     }
   }
 }

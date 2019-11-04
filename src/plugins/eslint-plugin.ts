@@ -1,16 +1,14 @@
-import { VDir, VConfigType, VConfigFile } from '../vnodes'
-import { Pluginable, PluginArgs } from '../types'
-import { VPackageJson } from './NpmPlugin'
-import { PrettierPlugin } from './PrettierPlugin'
-import { JestPlugin } from '.'
+import { VConfigType, VConfigFile, VPackageJson } from '../vnodes'
+import { Plugin, PatchStrategy } from '../types'
 
-export class EslintPlugin implements Pluginable {
-  version = '0.1.0'
+export const eslintPlugin: Plugin = {
+  name: 'eslint',
+  version: '0.1.0',
 
-  async extendVirtualFileSystem(root: VDir, { hasPlugin }: PluginArgs) {
-    let npmPackage = VPackageJson.getPackageOrFail(root)
+  async apply(root, { hasPlugin }) {
+    let npmPackage = VPackageJson.getOrFail(root)
 
-    await npmPackage.addDevDependencies({
+    await npmPackage.addLatestDevDependencies({
       eslint: '^5.14.0',
       'eslint-config-standard': '^12.0.0',
       'eslint-plugin-import': '^2.16.0',
@@ -32,9 +30,9 @@ export class EslintPlugin implements Pluginable {
     }
 
     // Tweak ourself if prettier is also being used
-    if (hasPlugin(PrettierPlugin)) {
+    if (hasPlugin('prettier')) {
       // Add the eslint-config-prettier extension
-      await npmPackage.addDevDependencies({
+      await npmPackage.addLatestDevDependencies({
         'eslint-config-prettier': '^4.0.0'
       })
 
@@ -43,12 +41,12 @@ export class EslintPlugin implements Pluginable {
     }
 
     // Add jest to the environment
-    if (hasPlugin(JestPlugin)) conf.env.jest = true
+    if (hasPlugin('jest')) conf.env.jest = true
 
     // Add the config file
     root.addChild(new VConfigFile('.eslintrc.yml', VConfigType.yaml, conf))
 
     // Add a lint script
-    npmPackage.scripts['lint'] = 'eslint src'
+    npmPackage.addPatch('scripts.link', PatchStrategy.placeholder, 'eslint src')
   }
 }

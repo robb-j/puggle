@@ -1,8 +1,4 @@
-import {
-  lastDirectory,
-  removeSurroundingSlashes,
-  sortObjectKeys
-} from '../index'
+import { lastDirectory, trimSlashes, sortObjectKeys } from '../index'
 
 describe('#lastDirectory', () => {
   it('should return the last directory', () => {
@@ -13,7 +9,7 @@ describe('#lastDirectory', () => {
 
 describe('#removeSurroundingSlashes', () => {
   it('should remove slashes', () => {
-    let result = removeSurroundingSlashes('/test_message/')
+    let result = trimSlashes('/test_message/')
     expect(result).toBe('test_message')
   })
 })

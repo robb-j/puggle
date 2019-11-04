@@ -1,4 +1,4 @@
-import { trimInlineTemplate } from '../trimInlineTemplate'
+import { trimInlineTemplate } from '../trim-inline-template'
 
 describe('#trimInlineTemplate', () => {
   it('should trim preceeding lines', () => {

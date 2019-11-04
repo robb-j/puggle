@@ -1,6 +1,5 @@
-import { VDir, VConfigFile, VConfigType } from '../vnodes'
-import { Pluginable, PluginArgs } from '../types'
-import { VPackageJson } from './NpmPlugin'
+import { VConfigFile, VConfigType, VPackageJson } from '../vnodes'
+import { Plugin, PatchStrategy } from '../types'
 
 const baseTsconfig = {
   compilerOptions: {
@@ -28,13 +27,14 @@ const baseTsconfig = {
   exclude: ['node_modules']
 }
 
-export class TypeScriptPlugin implements Pluginable {
-  version = '0.1.0'
+export const typescriptPlugin: Plugin = {
+  name: 'typescript',
+  version: '0.2.0',
 
-  async extendVirtualFileSystem(root: VDir, args: PluginArgs) {
-    let npmPackage = VPackageJson.getPackageOrFail(root)
+  async apply(root, { hasPlugin }) {
+    let npmPackage = VPackageJson.getOrFail(root)
 
-    await npmPackage.addDevDependencies({
+    await npmPackage.addLatestDevDependencies({
       typescript: '^3.4.1',
       'ts-node': '^8.0.3',
       '@types/node': '^11.13.0'
@@ -44,7 +44,7 @@ export class TypeScriptPlugin implements Pluginable {
       new VConfigFile('tsconfig.json', VConfigType.json, { ...baseTsconfig })
     )
 
-    npmPackage.scripts['build'] = 'tsc'
-    npmPackage.scripts['lint'] = 'tsc --noEmit'
+    npmPackage.addPatch('scripts.build', PatchStrategy.persist, 'tsc')
+    npmPackage.addPatch('scripts.lint', PatchStrategy.persist, 'tsc --noEmit')
   }
 }

@@ -1,14 +1,13 @@
-import { Preset, PluginArgs } from '../types'
+import { Preset, PatchStrategy } from '../types'
 import { trimInlineTemplate } from '../utils'
-import { VFile, VDir, VIgnoreFile } from '../vnodes'
+import { VFile, VDir, VIgnoreFile, VPackageJson } from '../vnodes'
 import {
-  NpmPlugin,
-  JestPlugin,
-  PrettierPlugin,
-  EslintPlugin,
-  VPackageJson,
-  GitPlugin,
-  DockerPlugin
+  npmPlugin,
+  jestPlugin,
+  prettierPlugin,
+  eslintPlugin,
+  gitPlugin,
+  dockerPlugin
 } from '../plugins'
 
 const indexJs = (name: string) => trimInlineTemplate`
@@ -58,38 +57,45 @@ const readme = (name: string) => trimInlineTemplate`
   > This project was set up by [puggle](https://npm.im/puggle)
 `
 
-export class TestPreset implements Preset {
-  title = 'robb-j:node'
-  version = '0.1.0'
+export const testPreset: Preset = {
+  name: 'robb-j:node',
+  version: '0.1.0',
 
-  plugins = [
-    new GitPlugin(),
-    new NpmPlugin(),
-    new JestPlugin(),
-    new PrettierPlugin(),
-    new EslintPlugin(),
-    new DockerPlugin()
-  ]
+  plugins: [
+    gitPlugin,
+    npmPlugin,
+    jestPlugin,
+    prettierPlugin,
+    eslintPlugin,
+    dockerPlugin
+  ],
 
-  async extendVirtualFileSystem(root: VDir, { projectName }: PluginArgs) {
-    let npmPackage = VPackageJson.getPackageOrFail(root)
+  async apply(root: VDir, { targetName }) {
+    let npmPackage = VPackageJson.getOrFail(root)
 
     await Promise.all([
-      npmPackage.addDependencies({ dotenv: '^8.0.0' }),
-      npmPackage.addDevDependencies({ nodemon: '^1.19.1' })
+      npmPackage.addLatestDependencies({ dotenv: '^8.0.0' }),
+      npmPackage.addLatestDevDependencies({ nodemon: '^1.19.1' })
     ])
 
-    npmPackage.values['main'] = 'src/index.js'
-    npmPackage.scripts['start'] = 'node -r dotenv/config src/index.js'
-    npmPackage.scripts[
-      'dev'
-    ] = `NODE_ENV=development nodemon -w src -x 'node -r dotenv/config' src/index.js`
+    npmPackage.addPatch('main', PatchStrategy.placeholder, 'src/index.js')
+
+    npmPackage.addPatch(
+      'scripts.start',
+      PatchStrategy.placeholder,
+      'node -r dotenv/config src/index.js'
+    )
+    npmPackage.addPatch(
+      'scripts.dev',
+      PatchStrategy.placeholder,
+      `NODE_ENV=development nodemon -w src -x 'node -r dotenv/config' src/index.js`
+    )
 
     root.addChild(
-      new VFile('README.md', readme(projectName)),
+      new VFile('README.md', readme(targetName)),
       new VDir('src', [
         new VDir('__tests__', [new VFile('index.spec.js', indexSpecJs())]),
-        new VFile('index.js', indexJs(projectName))
+        new VFile('index.js', indexJs(targetName))
       ]),
       new VFile('.editorconfig', editorconfig()),
       new VIgnoreFile('.gitignore', 'Ignore files from git source control', [

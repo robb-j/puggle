@@ -1,9 +1,15 @@
 import { StringKeyed } from '../types'
 
-export * from './promisified'
-export * from './trimInlineTemplate'
-export * from './loadPresets'
-export * from './stringifyVNode'
+export * from './trim-inline-template'
+export * from './find-file-conflicts'
+export * from './stringify-vnode'
+export * from './npm'
+
+/**
+ * Whether an object is a VDir without "instanceof"
+ * gets around packages having different classes
+ */
+export const isVDir = (obj: any) => obj.constructor.name === 'VDir'
 
 /**
  * Get the last directory in a path
@@ -16,7 +22,7 @@ export function lastDirectory(path: string) {
 /**
  * Remove preceding or trailing slashes from a string
  */
-export const removeSurroundingSlashes = (input: string) => {
+export const trimSlashes = (input: string) => {
   return input.replace(/^\/+/, '').replace(/\/+$/, '')
 }
 

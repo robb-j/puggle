@@ -1,19 +1,16 @@
-import Yaml from 'yaml'
-
-import { trimInlineTemplate } from '../utils'
-import { VFile } from './VFile'
-import { PatchMode } from '../types'
-import fs from 'fs'
 import { join } from 'path'
-import { promisify } from 'util'
+
+import { readFile, writeFile } from 'fs-extra'
+import Yaml from 'yaml'
 
 import get from 'lodash.get'
 import set from 'lodash.set'
 import merge from 'lodash.merge'
 import clone from 'lodash.clonedeep'
 
-const readFile = promisify(fs.readFile)
-const writeFile = promisify(fs.writeFile)
+import { trimInlineTemplate } from '../utils'
+import { VFile } from './vfile'
+import { PatchStrategy } from '../types'
 
 /**
  * The supported types of config files
@@ -26,7 +23,7 @@ export enum VConfigType {
 export interface VConfigPatch {
   path: string
   data: any
-  mode: PatchMode
+  strategy: PatchStrategy
 }
 
 /**
@@ -41,24 +38,7 @@ export class VConfigFile extends VFile {
   comment?: string
   patches: VConfigPatch[]
 
-  constructor(
-    name: string,
-    type: VConfigType,
-    values: any,
-    args: { comment?: string; patch?: PatchMode } = {}
-  ) {
-    super(name, '', args.patch)
-    this.type = type
-    this.values = values
-    this.comment = args.comment
-    this.patches = []
-  }
-
-  addPatch(path: string, mode: PatchMode, data: any) {
-    this.patches.push({ path, mode, data })
-  }
-
-  render(type: VConfigType, values: any, comment: string = this.name) {
+  static render(type: VConfigType, values: any, comment?: string) {
     let start = trimInlineTemplate`
       #
       # ${comment}
@@ -70,40 +50,21 @@ export class VConfigFile extends VFile {
       case VConfigType.json:
         return JSON.stringify(values, null, 2)
       case VConfigType.yaml:
-        return start + Yaml.stringify(values)
+        return (comment ? start : '') + Yaml.stringify(values)
     }
   }
 
-  prepareContents() {
-    return this.render(this.type, this.values, this.comment)
-  }
-
-  // patchFile(raw: string) {
-  //   if (this.patch === PatchMode.placeholder) return raw
-
-  //   const data = Yaml.parse(raw)
-
-  //   return this.render(
-  //     this.type,
-  //     merge.recursive(true, data, this.values),
-  //     this.comment
-  //   )
-  // }
-
-  async patchNode(basePath: string) {
-    if (this.patch === PatchMode.placeholder) return
-
-    let path = join(basePath, this.name)
-
-    let conf = Yaml.parse(await readFile(path, 'utf8'))
-
-    let mergedValues = clone(this.values)
+  static applyPatches(values: any, patches: VConfigPatch[]) {
+    let mergedValues = clone(values)
 
     const isPrimative = (v: any) =>
       ['string', 'number', 'boolean'].some(type => typeof v === type)
 
-    for (let patch of this.patches) {
-      if (patch.mode === PatchMode.placeholder) continue
+    for (let patch of patches) {
+      //
+      // Do nothing for placeholder patches
+      //
+      if (patch.strategy === PatchStrategy.placeholder) continue
 
       let value = get(mergedValues, patch.path)
       if (!value) {
@@ -123,11 +84,47 @@ export class VConfigFile extends VFile {
         //
         set(mergedValues, patch.path, patch.data)
       } else {
-        console.log(`Cannot merge ${typeof value} and ${typeof patch.data}`)
+        console.log(`Cannot merge '${typeof value}' and '${typeof patch.data}'`)
       }
     }
 
+    return mergedValues
+  }
+
+  constructor(
+    name: string,
+    type: VConfigType,
+    values: any,
+    args: { comment?: string; strategy?: PatchStrategy } = {}
+  ) {
+    super(name, '', args.strategy)
+    this.type = type
+    this.values = values
+    this.comment = args.comment
+    this.patches = []
+  }
+
+  addPatch(path: string, strategy: PatchStrategy, data: any) {
+    this.patches.push({ path, strategy, data })
+  }
+
+  prepareContents() {
+    return VConfigFile.render(this.type, this.values, this.comment)
+  }
+
+  async patchFile(basePath: string) {
+    if (this.strategy === PatchStrategy.placeholder) return
+
+    let path = join(basePath, this.name)
+
+    let values = Yaml.parse(await readFile(path, 'utf8'))
+
+    let mergedValues = VConfigFile.applyPatches(values, this.patches)
+
     // Serialize the updated values here ...
-    return writeFile(path, this.render(this.type, mergedValues, this.comment))
+    return writeFile(
+      path,
+      VConfigFile.render(this.type, mergedValues, this.comment)
+    )
   }
 }
