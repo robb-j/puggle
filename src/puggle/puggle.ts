@@ -44,7 +44,10 @@ export const puggle: Puggle = {
     if (!confirmed) process.exit(1)
 
     await vfs.writeToFile('.')
-    console.log(`Initialized into ${targetName}`)
+
+    if (!options.silent) {
+      console.log(`Initialized into ${targetName}`)
+    }
   },
 
   async update(targetPath, presets, options = {}) {
@@ -76,6 +79,10 @@ export const puggle: Puggle = {
     if (!confirmed) process.exit(1)
 
     await vfs.patchFile('.')
+
+    if (!options.silent) {
+      console.log(`Updated '${newConfig.projectName}'`)
+    }
   },
 
   async generateVfs(preset, targetName, targetPath, config) {

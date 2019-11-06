@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { readFileSync } from 'fs'
+import { readFileSync } from 'fs-extra'
 import { Preset, PuggleConfig } from '../types'
 
 const pkg = require('../../package.json')

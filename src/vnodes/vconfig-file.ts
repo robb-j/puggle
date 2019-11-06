@@ -61,11 +61,6 @@ export class VConfigFile extends VFile {
       ['string', 'number', 'boolean'].some(type => typeof v === type)
 
     for (let patch of patches) {
-      //
-      // Do nothing for placeholder patches
-      //
-      if (patch.strategy === PatchStrategy.placeholder) continue
-
       let value = get(mergedValues, patch.path)
       if (!value) {
         //
@@ -123,7 +118,10 @@ export class VConfigFile extends VFile {
 
     let values = Yaml.parse(await readFile(path, 'utf8'))
 
-    let mergedValues = VConfigFile.applyPatches(values, this.patches)
+    let mergedValues = VConfigFile.applyPatches(
+      values,
+      this.patches.filter(p => p.strategy === PatchStrategy.persist)
+    )
 
     // Serialize the updated values here ...
     return writeFile(

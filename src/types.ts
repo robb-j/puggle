@@ -7,6 +7,7 @@ export interface Class<T, U extends any[] = any[]> {
 
 export interface PuggleOptions {
   dryRun?: boolean
+  silent?: boolean
 }
 
 export enum PatchStrategy {

@@ -106,25 +106,6 @@ describe('VConfigFile', () => {
         animal: 'dog'
       })
     })
-    it('should ignore placeholder values', () => {
-      const patches = [
-        {
-          path: 'geoff',
-          strategy: PatchStrategy.placeholder,
-          data: { age: 42 }
-        }
-      ]
-      const values = {
-        geoff: {
-          name: 'geoff',
-          age: 40
-        }
-      }
-
-      const result = VConfigFile.applyPatches(values, patches)
-
-      expect(result.geoff.age).toEqual(40)
-    })
   })
 
   describe('#constructor', () => {
