@@ -1,8 +1,5 @@
 import { Plugin } from '../types'
 import { VDir, VIgnoreFile } from '../vnodes'
-import { NpmPlugin } from './npm-plugin'
-import { JestPlugin } from './jest-plugin'
-import { TypeScriptPlugin } from './typescript-plugin'
 
 export const gitPlugin: Plugin = {
   name: 'git',

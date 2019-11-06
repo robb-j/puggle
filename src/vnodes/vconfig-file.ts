@@ -109,7 +109,11 @@ export class VConfigFile extends VFile {
   }
 
   prepareContents() {
-    return VConfigFile.render(this.type, this.values, this.comment)
+    return VConfigFile.render(
+      this.type,
+      VConfigFile.applyPatches(this.values, this.patches),
+      this.comment
+    )
   }
 
   async patchFile(basePath: string) {

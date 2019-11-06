@@ -10,19 +10,13 @@ const promptOptions = {
 }
 
 export const puggle: Puggle = {
-  async init(preset, path, options = {}) {
-    let { targetName, targetPath } = await prompts(
+  async init(preset, targetPath, options = {}) {
+    let { targetName } = await prompts(
       [
         {
           type: 'text',
           name: 'targetName',
-          message: 'name'
-        },
-        {
-          type: 'text',
-          name: 'targetPath',
-          message: 'path',
-          initial: '.'
+          message: 'project name'
         }
       ],
       promptOptions
@@ -41,28 +35,45 @@ export const puggle: Puggle = {
 
     if (options.dryRun) return console.log(stringifyVNode(vfs))
 
+    let { confirmed } = await prompts({
+      type: 'confirm',
+      name: 'confirmed',
+      message: `Initialize project into '${targetPath}'?`
+    })
+
+    if (!confirmed) process.exit(1)
+
     await vfs.writeToFile('.')
     console.log(`Initialized into ${targetName}`)
   },
 
   async update(targetPath, presets, options = {}) {
-    const config = loadConfig(targetPath)
+    const oldConfig = loadConfig(targetPath)
 
-    let preset = presets.find(p => p.name === config.preset.name)!
+    let preset = presets.find(p => p.name === oldConfig.preset.name)!
 
     if (preset === undefined) {
-      console.log(`preset '${config.preset.name}' not found`)
+      console.log(`preset '${oldConfig.preset.name}' not found`)
       process.exit(1)
     }
 
-    let newConfig = makeConfig(preset, config.projectName)
+    let newConfig = makeConfig(preset, oldConfig.projectName)
+    newConfig.params = oldConfig.params
 
     let vfs = await puggle.generateVfs(
       preset,
-      config.projectName,
+      oldConfig.projectName,
       targetPath,
       newConfig
     )
+
+    let { confirmed } = await prompts({
+      type: 'confirm',
+      name: 'confirmed',
+      message: `Update project at '${targetPath}'?`
+    })
+
+    if (!confirmed) process.exit(1)
 
     await vfs.patchFile('.')
   },

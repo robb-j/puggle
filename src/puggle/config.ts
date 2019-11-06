@@ -2,7 +2,7 @@ import { join } from 'path'
 import { readFileSync } from 'fs'
 import { Preset, PuggleConfig } from '../types'
 
-const pkg = require('../package.json')
+const pkg = require('../../package.json')
 
 export function loadConfig(basePath: string): PuggleConfig {
   let path = join(basePath, 'puggle.json')
