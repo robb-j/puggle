@@ -36,3 +36,5 @@ export async function pickPreset(presets: Preset[]): Promise<Preset> {
 
   return chosen
 }
+
+export const presetify = (p: Preset) => p

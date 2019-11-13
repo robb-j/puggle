@@ -101,3 +101,5 @@ export const puggle: Puggle = {
     return root
   }
 }
+
+export const pugglify = (p: Puggle) => p

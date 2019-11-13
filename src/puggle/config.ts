@@ -24,3 +24,5 @@ export function makeConfig(preset: Preset, targetName: string): PuggleConfig {
     params: {}
   }
 }
+
+export const configify = (c: PuggleConfig) => c

@@ -27,3 +27,5 @@ export function makePluginContext(
     }
   }
 }
+
+export const contextify = (c: PluginContext) => c
