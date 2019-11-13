@@ -26,6 +26,7 @@ export async function pickPreset(presets: Preset[]): Promise<Preset> {
   let { chosenName } = await prompts({
     type: 'select',
     name: 'chosenName',
+    message: 'preset',
     choices: presets.map(choiceify)
   })
 
