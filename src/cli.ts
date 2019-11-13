@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 
-import { Puggle } from './Puggle'
+import { puggle, pickPreset, loadPresets } from './puggle'
 import { trimInlineTemplate } from './utils'
 import yargs from 'yargs'
+import { testPreset } from './utils/test-preset'
 
 // Use require to avoid it being compilled in
 const packageJson = require('../package.json')
 
 const initMessage = trimInlineTemplate`
-  This utility walks you through the creation of a puggle (${
-    packageJson.version
-  }) project.
+  This utility walks you through the creation of a puggle (${packageJson.version}) project.
   
   It will initialize a new project in the directory of your choosing.
 
@@ -18,7 +17,7 @@ const initMessage = trimInlineTemplate`
 `
 
 yargs
-  .option('dryrun', {
+  .option('dryRun', {
     describe: `Don't actually create files`,
     type: 'boolean',
     default: false
@@ -33,24 +32,63 @@ yargs
     yargs =>
       yargs.positional('path', {
         type: 'string',
-        describe: 'Where to initialize into'
+        describe: 'Where to initialize into',
+        default: '.'
       }),
-    yargs => {
+    async ({ path, dryRun }) => {
       console.log(initMessage)
 
-      Puggle.runFromEnvironment({
-        path: yargs.path,
-        dryRun: yargs.dryrun
-      })
+      let presets = await loadPresets()
+      let preset = await pickPreset(presets)
+
+      await puggle.init(preset, path, { dryRun })
     }
   )
   .command(
     'update [path]',
     'Update a project setup with puggle',
-    yargs => yargs,
-    () => {
-      console.log('Coming soon ...')
+    yargs =>
+      yargs.positional('path', {
+        type: 'string',
+        describe: 'Where the puggle project to update is',
+        default: '.'
+      }),
+    async ({ path, dryRun }) => {
+      let presets = await loadPresets()
+      await puggle.update(path, presets, { dryRun })
     }
   )
+
+if (process.env.NODE_ENV === 'development') {
+  const { TestPreset } = require('./utils/test-preset')
+
+  yargs.command(
+    'test:init [path]',
+    'Run the cli with a test preset',
+    yargs =>
+      yargs
+        .positional('path', { type: 'string', default: '.' })
+        .option('dryRun', { type: 'boolean', default: false }),
+    async ({ dryRun, path }) => {
+      console.log('Using test preset')
+
+      await puggle.init(testPreset, path, { dryRun })
+    }
+  )
+
+  yargs.command(
+    'test:update [path]',
+    'Run the cli with a test preset',
+    yargs =>
+      yargs
+        .positional('path', { type: 'string', default: '.' })
+        .option('dryRun', { type: 'boolean', default: false }),
+    async ({ dryRun, path }) => {
+      console.log('Using test preset')
+
+      await puggle.update(path, [testPreset], { dryRun })
+    }
+  )
+}
 
 yargs.parse()
