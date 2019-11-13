@@ -10,7 +10,7 @@ export const prettierPlugin: Plugin = {
 
     await npmPackage.addLatestDevDependencies({
       prettier: '^1.16.4',
-      husky: '^1.3.1',
+      yorkie: '^2.0.0',
       'lint-staged': '^8.1.4'
     })
 
@@ -25,10 +25,8 @@ export const prettierPlugin: Plugin = {
     //
     // Add a husky config to run lint-staged before commits
     //
-    npmPackage.addPatch('husky', PatchStrategy.persist, {
-      hooks: {
-        'pre-commit': 'lint-staged'
-      }
+    npmPackage.addPatch('gitHooks', PatchStrategy.persist, {
+      'pre-commit': 'lint-staged'
     })
 
     // Add a lint-staged config to run prettier
