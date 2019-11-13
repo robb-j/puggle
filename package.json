@@ -1,6 +1,6 @@
 {
   "name": "puggle",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A CLI for bootstrapping and keeping project config up-to-date",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
