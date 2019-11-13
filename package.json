@@ -85,6 +85,9 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "testMatch": [
+      "**/__tests__/**/*.spec.ts"
+    ],
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "/node_modules/",

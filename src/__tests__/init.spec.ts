@@ -1,83 +1,27 @@
 //
-// Integration tests
+// Integration test for puggle.init
 //
 
-import { trimInlineTemplate } from '../utils'
-import { Preset, Plugin, PatchStrategy } from '../types'
-import {
-  VFile,
-  VNode,
-  VIgnoreFile,
-  VDir,
-  VConfigFile,
-  VConfigType
-} from '../vnodes'
-import { puggle } from '../puggle'
+import { puggle, makeConfig } from '../puggle'
 import { writeFile, ensureDir } from 'fs-extra'
 import prompts from 'prompts'
 import yaml from 'yaml'
+
+import { testJsFile, testIgnore, testPreset } from './test-preset'
 import { mocked } from 'ts-jest/utils'
-
-const testJsFile = trimInlineTemplate`
-  console.log('Hello, world!')
-`
-
-const testIgnore = trimInlineTemplate`
-  #
-  # ignore
-  #
-
-  dist
-`
-
-const testConfig = {
-  geoff: {
-    name: 'Geoff'
-  }
-}
-
-const testPlugin: Plugin = {
-  name: 'test-plugin',
-  version: '1.2.3',
-  async apply(root, ctx) {
-    root.addChild(new VIgnoreFile('.gitignore', 'ignore', ['dist']))
-  }
-}
-
-const testPreset: Preset = {
-  name: 'test-preset',
-  version: '9.8.7',
-  plugins: [testPlugin],
-  async apply(root, ctx) {
-    let conf = new VConfigFile('config.json', VConfigType.yaml, testConfig, {
-      comment: 'my config',
-      strategy: PatchStrategy.persist
-    })
-
-    conf.addPatch('geoff.pets', PatchStrategy.placeholder, [
-      { name: 'bonny', animal: 'dog' }
-    ])
-
-    conf.addPatch('tim', PatchStrategy.persist, { name: 'Tim' })
-
-    let js = new VDir('src', [
-      new VFile('index.js', testJsFile, PatchStrategy.placeholder)
-    ])
-
-    root.addChild(conf, js)
-  }
-}
 
 const testOpts = {
   silent: true
 }
+
+const testProjectName = 'project-name'
 
 jest.mock('fs-extra')
 jest.mock('yaml')
 
 describe('puggle init', () => {
   beforeEach(() => {
-    prompts.inject(['project-name', true])
+    prompts.inject([testProjectName, true])
   })
 
   it('should write files from plugins', async () => {
@@ -116,5 +60,16 @@ describe('puggle init', () => {
         name: 'Tim'
       }
     })
+  })
+
+  it('should add a puggle.json', async () => {
+    await puggle.init(testPreset, 'root', testOpts)
+
+    let config = JSON.stringify(
+      makeConfig(testPreset, testProjectName),
+      null,
+      2
+    )
+    expect(writeFile).toBeCalledWith('root/puggle.json', config)
   })
 })
