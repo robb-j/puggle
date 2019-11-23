@@ -31,7 +31,9 @@ export const testPlugin: Plugin = {
   name: 'test-plugin',
   version: '1.2.3',
   async apply(root, ctx) {
-    root.addChild(new VIgnoreFile('.gitignore', 'ignore', ['dist']))
+    root.addChild(
+      new VIgnoreFile('.gitignore', 'ignore', ['dist'], PatchStrategy.persist)
+    )
   }
 }
 

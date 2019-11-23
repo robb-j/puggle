@@ -17,7 +17,7 @@ export class VFile extends VNode {
   constructor(
     name: string,
     contents: string = '',
-    strategy = PatchStrategy.persist
+    strategy = PatchStrategy.placeholder
   ) {
     super(name)
     this.contents = contents

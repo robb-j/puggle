@@ -53,10 +53,12 @@ describe('VIgnoreFile', () => {
 
   describe('#prepareContents', () => {
     it('should write the rules', () => {
-      const ignore = new VIgnoreFile('ignore', 'some info', [
-        'node_modules',
-        'dist'
-      ])
+      const ignore = new VIgnoreFile(
+        'ignore',
+        'some info',
+        ['node_modules', 'dist'],
+        PatchStrategy.persist
+      )
 
       let result = ignore.prepareContents()
 
@@ -65,7 +67,7 @@ describe('VIgnoreFile', () => {
     })
 
     it('should add the desccription at the top', () => {
-      let ignore = new VIgnoreFile('ignore', 'hello', [])
+      let ignore = new VIgnoreFile('ignore', 'hello', [], PatchStrategy.persist)
       let result = ignore.prepareContents()
       expect(result).toMatch(/^# hello$/m)
     })
@@ -75,7 +77,12 @@ describe('VIgnoreFile', () => {
     it('should read the target file', async () => {
       mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
 
-      const ignore = new VIgnoreFile('.ignore', 'some info', ['dist'])
+      const ignore = new VIgnoreFile(
+        '.ignore',
+        'some info',
+        ['dist'],
+        PatchStrategy.persist
+      )
 
       await ignore.patchFile('some/dir')
 
@@ -85,10 +92,12 @@ describe('VIgnoreFile', () => {
     it('should write the patched file', async () => {
       mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
 
-      const ignore = new VIgnoreFile('.ignore', 'some info', [
-        'node_modules',
-        'dist'
-      ])
+      const ignore = new VIgnoreFile(
+        '.ignore',
+        'some info',
+        ['node_modules', 'dist'],
+        PatchStrategy.persist
+      )
 
       await ignore.patchFile('some/dir')
 
@@ -103,10 +112,12 @@ describe('VIgnoreFile', () => {
         result = data
       })
 
-      const ignore = new VIgnoreFile('.ignore', 'some info', [
-        'node_modules',
-        'dist'
-      ])
+      const ignore = new VIgnoreFile(
+        '.ignore',
+        'some info',
+        ['node_modules', 'dist'],
+        PatchStrategy.persist
+      )
 
       await ignore.patchFile('some/dir')
 

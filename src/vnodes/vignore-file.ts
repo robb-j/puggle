@@ -34,7 +34,7 @@ export class VIgnoreFile extends VFile {
     name: string,
     description: string = name,
     rules: string[] = [],
-    strategy = PatchStrategy.persist
+    strategy?: PatchStrategy
   ) {
     super(name, '', strategy)
     this.description = description
