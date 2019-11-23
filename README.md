@@ -410,6 +410,36 @@ just like the sample preset above.
 
 For more info see the [default plugins](src/plugins)
 
+## Testing notes
+
+With prettier, json/yaml files reset the extra '\n' at the end of files each init/update.
+
+What to do with config files that have no patches?
+
+- It could see there are no patches and full overwrite
+- It comes back to what to do with the base content for VConfigFile
+
+## Ideas / future work
+
+**override PatchStrategy.persist**
+
+Some way of locking a file in `puggle.json` so that the local version is peristed, overriding a `PatchStrategy.persist`
+
+```json
+{
+  "persistFiles": [
+    "src/somefile.js",
+    { "config": "package.json", "key": "prettier" },
+    ["package.json", "prettier.semi"]
+  ]
+}
+```
+
+**preview PatchStrategy.placeholder**
+
+Some way of comparing the files/values from `PatchStrategy.placeholder`
+with the live files, so you can manually update files.
+
 ---
 
 > This project was setup with [robb-j/ts-node-base](https://github.com/robb-j/ts-node-base/)
