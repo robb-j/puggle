@@ -7,12 +7,12 @@ import { Preset } from '../types'
 const glob = promisify(require('glob'))
 const exec = promisify(require('child_process').exec)
 
-export async function loadPresets() {
+export async function loadPresets(): Promise<Preset[]> {
   const { stdout } = await exec('npm root -g')
 
   let cwd = stdout.trim()
 
-  const matches: string[] = await glob('*/puggle-preset-*', { cwd })
+  const matches: string[] = await glob('*/puggle-preset*', { cwd })
 
   const modules = matches.map((name: string) => require(join(cwd, name)))
 
