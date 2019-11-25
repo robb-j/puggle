@@ -27,6 +27,8 @@ A CLI for bootstrapping and then also keeping project tooling config up-to-date.
     - [VPackageJson](#vpackagejson)
   - [Preset publishing](#preset-publishing)
   - [Making Plugins](#making-plugins)
+- [Testing notes](#testing-notes)
+- [Ideas / future work](#ideas--future-work)
 
 <!-- toc-tail -->
 
