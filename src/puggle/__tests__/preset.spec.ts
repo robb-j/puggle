@@ -3,7 +3,9 @@ import { mocked } from 'ts-jest/utils'
 import { join } from 'path'
 
 jest.mock('glob', () =>
-  jest.fn((glob, opts, cb) => cb(null, ['mock-preset.js']))
+  jest.fn((glob, opts, cb) =>
+    cb(null, ['mock-preset.js', 'mock-preset-list.js'])
+  )
 )
 
 const fakeExec = {
@@ -19,8 +21,24 @@ describe('#loadPresets', () => {
   it('should query for presets', async () => {
     let results = await loadPresets()
 
-    expect(results).toHaveLength(1)
-    expect(results[0].name).toEqual('mock-plugin')
-    expect(results[0].version).toEqual('1.2.3')
+    expect(results).toContainEqual({
+      name: 'mock-preset',
+      version: '1.2.3',
+      apply: expect.any(Function)
+    })
+  })
+  it('should process preset arrays', async () => {
+    let results = await loadPresets()
+
+    expect(results).toContainEqual({
+      name: 'list-preset-a',
+      version: '1.2.3',
+      apply: expect.any(Function)
+    })
+    expect(results).toContainEqual({
+      name: 'list-preset-b',
+      version: '1.2.3',
+      apply: expect.any(Function)
+    })
   })
 })

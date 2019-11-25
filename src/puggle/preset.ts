@@ -14,7 +14,7 @@ export async function loadPresets() {
 
   const matches = await glob('*/puggle-preset-*', { cwd })
 
-  return matches.map((name: string) => require(join(cwd, name)))
+  return matches.map((name: string) => require(join(cwd, name))).flat()
 }
 
 export async function pickPreset(presets: Preset[]): Promise<Preset> {
