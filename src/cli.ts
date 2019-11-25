@@ -38,8 +38,8 @@ yargs
     async ({ path, dryRun }) => {
       console.log(initMessage)
 
-      let presets = await loadPresets()
-      let preset = await pickPreset(presets)
+      const presets = await loadPresets()
+      const preset = await pickPreset(presets)
 
       await puggle.init(preset, path, { dryRun })
     }
@@ -54,8 +54,21 @@ yargs
         default: '.'
       }),
     async ({ path, dryRun }) => {
-      let presets = await loadPresets()
+      const presets = await loadPresets()
       await puggle.update(path, presets, { dryRun })
+    }
+  )
+  .command(
+    'presets',
+    'Show the presets that puggle can see',
+    yargs => yargs,
+    async argv => {
+      const presets = await loadPresets()
+      console.log(`Found ${presets.length} preset(s)`)
+
+      for (let preset of presets) {
+        console.log(`- ${preset.name}@${preset.version}`)
+      }
     }
   )
 
