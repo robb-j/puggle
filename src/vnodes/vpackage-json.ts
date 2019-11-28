@@ -49,7 +49,9 @@ export class VPackageJson extends VConfigFile {
   }
 
   constructor() {
-    super('package.json', VConfigType.json, null)
+    super('package.json', VConfigType.json, null, {
+      strategy: PatchStrategy.persist
+    })
     this.values = { ...defaultPackage }
   }
 
