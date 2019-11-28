@@ -28,7 +28,7 @@ A CLI for bootstrapping and then also keeping project tooling config up-to-date.
   - [Preset publishing](#preset-publishing)
   - [Making Plugins](#making-plugins)
 - [Testing notes](#testing-notes)
-- [Ideas / future work](#ideas--future-work)
+- [Ideas and future work](#ideas-and-future-work)
 
 <!-- toc-tail -->
 
@@ -421,7 +421,7 @@ What to do with config files that have no patches?
 - It could see there are no patches and full overwrite
 - It comes back to what to do with the base content for VConfigFile
 
-## Ideas / future work
+## Ideas and future work
 
 **override PatchStrategy.persist**
 
@@ -441,6 +441,26 @@ Some way of locking a file in `puggle.json` so that the local version is periste
 
 Some way of comparing the files/values from `PatchStrategy.placeholder`
 with the live files, so you can manually update files.
+
+**in-project generators**
+
+```bash
+puggle add route
+> route name: new-route
+# added src/routes/general/new-route.ts
+# added src/routes/general/__test__/new-route.spec.ts
+```
+
+```ts
+interface Generator {
+  name: string
+  apply(root: VDir, ctx: PluginContext)
+}
+
+interface PresetChanges extends Preset {
+  generators: Generator[]
+}
+```
 
 ---
 
