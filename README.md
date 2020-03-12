@@ -3,7 +3,7 @@
 [![Build Status](https://circleci.com/gh/robb-j/puggle.svg?style=svg)](https://circleci.com/gh/robb-j/puggle)
 [![Coverage Status](https://coveralls.io/repos/github/robb-j/puggle/badge.svg?branch=master)](https://coveralls.io/github/robb-j/puggle?branch=master)
 
-A CLI for bootstrapping and then keeping project tooling up-to-date.
+A CLI for bootstrapping and keeping project tooling up-to-date.
 
 <!-- toc-head -->
 
@@ -20,7 +20,7 @@ A CLI for bootstrapping and then keeping project tooling up-to-date.
     - [VFile](#vfile)
     - [VDir](#vdir)
     - [VConfigFile](#vconfigfile)
-  - [VIgnoreFile](#vignorefile)
+    - [VIgnoreFile](#vignorefile)
     - [VPackageJson](#vpackagejson)
   - [Publishing presets](#publishing-presets)
 - [A full example](#a-full-example)
@@ -251,7 +251,7 @@ config.addPatch('person', PatchStrategy.persist, { name: 'geoff' })
 config.addPatch('person.age', PatchStrategy.palceholder, 42)
 ```
 
-### VIgnoreFile
+#### VIgnoreFile
 
 This represents an ignore file like a `.gitignore`.
 You pass it a set of rules and a friendly comment to explain the file.
