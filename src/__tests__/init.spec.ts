@@ -11,7 +11,7 @@ import { testJsFile, testIgnore, testPreset } from './test-preset'
 import { mocked } from 'ts-jest/utils'
 
 const testOpts = {
-  silent: true
+  silent: true,
 }
 
 const testProjectName = 'project-name'
@@ -54,11 +54,11 @@ describe('puggle init', () => {
     expect(yaml.stringify).toBeCalledWith({
       geoff: {
         name: 'Geoff',
-        pets: [{ name: 'bonny', animal: 'dog' }]
+        pets: [{ name: 'bonny', animal: 'dog' }],
       },
       tim: {
-        name: 'Tim'
-      }
+        name: 'Tim',
+      },
     })
   })
 

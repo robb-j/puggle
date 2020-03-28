@@ -15,7 +15,7 @@ describe('#stringifyVNode', () => {
       stringifyVNode(
         new VDir('root', [
           new VNode('file_a'),
-          new VDir('sub_dir', [new VNode('file_b')])
+          new VDir('sub_dir', [new VNode('file_b')]),
         ])
       )
     )

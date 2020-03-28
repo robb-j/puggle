@@ -7,7 +7,7 @@ import {
   testIgnore,
   testConfig,
   testPlugin,
-  testPreset
+  testPreset,
 } from './test-preset'
 import { puggle, makeConfig } from '../puggle'
 import { readFileSync, readFile, writeFile } from 'fs-extra'
@@ -17,7 +17,7 @@ import { trimInlineTemplate } from '../utils'
 import prompts from 'prompts'
 
 const testOpts = {
-  silent: true
+  silent: true,
 }
 
 jest.mock('fs-extra')
@@ -40,8 +40,8 @@ mockedFiles.set(
   yaml.stringify({
     geoff: {
       name: 'Geoff',
-      age: 42
-    }
+      age: 42,
+    },
   })
 )
 
@@ -63,10 +63,10 @@ describe('puggle init', () => {
   beforeEach(() => {
     prompts.inject([true])
 
-    mocked(readFileSync).mockImplementation(path =>
+    mocked(readFileSync).mockImplementation((path) =>
       mockedFiles.get(path as any)
     )
-    mocked(readFile).mockImplementation(path => mockedFiles.get(path as any))
+    mocked(readFile).mockImplementation((path) => mockedFiles.get(path as any))
   })
 
   it('should merge persited files', async () => {
@@ -76,7 +76,7 @@ describe('puggle init', () => {
       '#\n# my config\n#\n\n' +
       yaml.stringify({
         geoff: { name: 'Geoff', age: 42 },
-        tim: { name: 'Tim' }
+        tim: { name: 'Tim' },
       })
     expect(writeFile).toBeCalledWith('root/config.json', expectedYaml)
 

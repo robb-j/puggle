@@ -27,7 +27,7 @@ export class VIgnoreFile extends VFile {
       return !line.startsWith('#') && line.length > 0
     }
 
-    return file.split('\n').filter(t => isRule(t.trim()))
+    return file.split('\n').filter((t) => isRule(t.trim()))
   }
 
   constructor(
@@ -54,7 +54,7 @@ export class VIgnoreFile extends VFile {
 
     const mergedRules = new Set<string>([
       ...this.rules,
-      ...VIgnoreFile.readRules(contents)
+      ...VIgnoreFile.readRules(contents),
     ])
 
     await writeFile(

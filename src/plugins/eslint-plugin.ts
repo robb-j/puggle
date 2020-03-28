@@ -14,26 +14,26 @@ export const eslintPlugin: Plugin = {
       'eslint-plugin-import': '^2.16.0',
       'eslint-plugin-node': '^8.0.1',
       'eslint-plugin-promise': '^4.0.1',
-      'eslint-plugin-standard': '^4.0.0'
+      'eslint-plugin-standard': '^4.0.0',
     })
 
     let conf = {
       root: true,
       parserOptions: {
         sourceType: 'module',
-        ecmaVersion: 2018
+        ecmaVersion: 2018,
       },
       env: {
-        node: true
+        node: true,
       } as any,
-      extends: ['standard']
+      extends: ['standard'],
     }
 
     // Tweak ourself if prettier is also being used
     if (hasPlugin('prettier')) {
       // Add the eslint-config-prettier extension
       await npmPackage.addLatestDevDependencies({
-        'eslint-config-prettier': '^4.0.0'
+        'eslint-config-prettier': '^4.0.0',
       })
 
       // Add prettier usage to the config
@@ -48,5 +48,5 @@ export const eslintPlugin: Plugin = {
 
     // Add a lint script
     npmPackage.addPatch('scripts.link', PatchStrategy.placeholder, 'eslint src')
-  }
+  },
 }

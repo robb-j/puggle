@@ -4,11 +4,11 @@ module.exports = [
   {
     name: 'list-preset-a',
     version: '1.2.3',
-    apply() {}
+    apply() {},
   },
   {
     name: 'list-preset-b',
     version: '1.2.3',
-    apply() {}
-  }
+    apply() {},
+  },
 ]

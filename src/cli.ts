@@ -20,7 +20,7 @@ yargs
   .option('dryRun', {
     describe: `Don't actually create files`,
     type: 'boolean',
-    default: false
+    default: false,
   })
   .scriptName('puggle')
   .alias('i', 'init')
@@ -29,11 +29,11 @@ yargs
   .command(
     ['init [path]', '$0 [path]'],
     'Bootstrap a new project',
-    yargs =>
+    (yargs) =>
       yargs.positional('path', {
         type: 'string',
         describe: 'Where to initialize into',
-        default: '.'
+        default: '.',
       }),
     async ({ path, dryRun }) => {
       console.log(initMessage)
@@ -47,11 +47,11 @@ yargs
   .command(
     'update [path]',
     'Update a project setup with puggle',
-    yargs =>
+    (yargs) =>
       yargs.positional('path', {
         type: 'string',
         describe: 'Where the puggle project to update is',
-        default: '.'
+        default: '.',
       }),
     async ({ path, dryRun }) => {
       const presets = await loadPresets()
@@ -61,8 +61,8 @@ yargs
   .command(
     'presets',
     'Show the presets that puggle can see',
-    yargs => yargs,
-    async argv => {
+    (yargs) => yargs,
+    async (argv) => {
       const presets = await loadPresets()
       console.log(`Found ${presets.length} preset(s)`)
 
@@ -78,7 +78,7 @@ if (process.env.NODE_ENV === 'development') {
   yargs.command(
     'test:init [path]',
     'Run the cli with a test preset',
-    yargs =>
+    (yargs) =>
       yargs
         .positional('path', { type: 'string', default: '.' })
         .option('dryRun', { type: 'boolean', default: false }),
@@ -92,7 +92,7 @@ if (process.env.NODE_ENV === 'development') {
   yargs.command(
     'test:update [path]',
     'Run the cli with a test preset',
-    yargs =>
+    (yargs) =>
       yargs
         .positional('path', { type: 'string', default: '.' })
         .option('dryRun', { type: 'boolean', default: false }),

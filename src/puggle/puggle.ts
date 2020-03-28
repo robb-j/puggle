@@ -6,7 +6,7 @@ import { stringifyVNode, findFileConflicts } from '../utils'
 import { makePluginContext } from './context'
 
 const promptOptions = {
-  onCancel: () => process.exit(1)
+  onCancel: () => process.exit(1),
 }
 
 export const puggle: Puggle = {
@@ -16,8 +16,8 @@ export const puggle: Puggle = {
         {
           type: 'text',
           name: 'targetName',
-          message: 'project name'
-        }
+          message: 'project name',
+        },
       ],
       promptOptions
     )
@@ -36,7 +36,7 @@ export const puggle: Puggle = {
     let { confirmed } = await prompts({
       type: 'confirm',
       name: 'confirmed',
-      message: `Initialize project into '${targetPath}'?`
+      message: `Initialize project into '${targetPath}'?`,
     })
 
     if (!confirmed) process.exit(1)
@@ -51,7 +51,7 @@ export const puggle: Puggle = {
   async update(targetPath, presets, options = {}) {
     const oldConfig = loadConfig(targetPath)
 
-    let preset = presets.find(p => p.name === oldConfig.preset.name)!
+    let preset = presets.find((p) => p.name === oldConfig.preset.name)!
 
     if (preset === undefined) {
       console.log(`preset '${oldConfig.preset.name}' not found`)
@@ -71,7 +71,7 @@ export const puggle: Puggle = {
     let { confirmed } = await prompts({
       type: 'confirm',
       name: 'confirmed',
-      message: `Update project at '${targetPath}'?`
+      message: `Update project at '${targetPath}'?`,
     })
 
     if (!confirmed) process.exit(1)
@@ -97,7 +97,7 @@ export const puggle: Puggle = {
     root.addChild(new VConfigFile('puggle.json', VConfigType.json, config))
 
     return root
-  }
+  },
 }
 
 export const pugglify = (p: Puggle) => p

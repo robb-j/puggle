@@ -9,19 +9,19 @@ export const jestPlugin: Plugin = {
     let npmPackage = VPackageJson.getOrFail(root)
 
     await npmPackage.addLatestDevDependencies({
-      jest: '^24.7.1'
+      jest: '^24.7.1',
     })
 
     if (hasPlugin('typescript')) {
       npmPackage.addPatch('jest', PatchStrategy.persist, {
         preset: 'ts-jest',
         testEnvironment: 'node',
-        testPathIgnorePatterns: ['/node_modules/', '/dist/']
+        testPathIgnorePatterns: ['/node_modules/', '/dist/'],
       })
 
       await npmPackage.addLatestDevDependencies({
         'ts-jest': '^24.0.1',
-        '@types/jest': '^24.0.11'
+        '@types/jest': '^24.0.11',
       })
     }
 
@@ -31,5 +31,5 @@ export const jestPlugin: Plugin = {
       PatchStrategy.placeholder,
       'jest --coverage'
     )
-  }
+  },
 }

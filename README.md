@@ -81,7 +81,7 @@ Below is a simple preset, it adds a folder called `src` and puts an `index.js` i
 ```js
 const { VDir, VFile } = require('puggle')
 
-const indexJs = name => `
+const indexJs = (name) => `
 // App entrypoint
 console.log('Hello, ${name}!')
 `
@@ -101,7 +101,7 @@ module.exports = {
 
     // Add the directory (and its file) to the virtual directory
     root.addChild(dir)
-  }
+  },
 }
 ```
 
@@ -193,7 +193,7 @@ const { VFile, VDir } = require('puggle')
 let dir = new VDir('src', [
   new VFile('.env', 'SECRET=pyjamas'),
   new VFile('.gitignore', '.env'),
-  new VDir('src', [new VNode('hello.txt', 'hi')])
+  new VDir('src', [new VNode('hello.txt', 'hi')]),
 ])
 
 // Add a new child
@@ -214,7 +214,7 @@ Yaml files can optionally have a comment too which is inserted at the top.
 const { VConfigFile, VConfigType } = require('puggle')
 
 const json = new VConfigFile('data.json', VConfigType.json, {
-  url: 'https://duck.com'
+  url: 'https://duck.com',
 })
 
 const yaml = new VConfigFile(
@@ -237,7 +237,7 @@ while the `placeholder` patches will prefer local changes.
 ```js
 // A base config file with an empty person object
 const config = new VConfigFile('data.json', VConfigType.json, {
-  person: {}
+  person: {},
 })
 
 // This patch will be persit on "puggle update"
@@ -266,7 +266,7 @@ let ignore = new VIgnoreFile('.gitignore', 'Files for git to ignore', [
   'node_modules',
   'coverage',
   '*.env',
-  '.DS_Store'
+  '.DS_Store',
 ])
 ```
 
@@ -290,7 +290,7 @@ pkg.addPatch('main', PatchStrategy.persist, 'src/index.js')
 // Add a placeholder patch for a lint command
 // -> Lets you customise the lint command later and your change is kept
 pkg.addPatch('scripts', PatchStrategy.placeholder, {
-  lint: 'eslint src'
+  lint: 'eslint src',
 })
 
 // Add a dependancy
@@ -300,7 +300,7 @@ pkg.addPatch('scripts', PatchStrategy.placeholder, {
 // -> These marked as a PatchStrategy.persist
 // -> You can pass multiple packages
 await pkg.addLatestDependencies({
-  dotenv: '^8.x'
+  dotenv: '^8.x',
 })
 ```
 
@@ -316,7 +316,7 @@ module.exports = {
   apply(root) {
     // Get the package.json which has already been added
     const pkg = VPackageJson.getOrFail(root)
-  }
+  },
 }
 ```
 
@@ -345,14 +345,14 @@ You need to have your package.json's `main` set to a script which has
 ```js
 // Export the preset
 module.exports = {
-  name: 'preset'
+  name: 'preset',
   /* your_preset_here */
 }
 
 // Or, you can export an array of presets
 module.exports = [
   { name: 'preset-a' /* your_preset_here */ },
-  { name: 'preset-b' /* your_preset_here */ }
+  { name: 'preset-b' /* your_preset_here */ },
 ]
 ```
 

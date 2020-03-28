@@ -21,10 +21,10 @@ const baseTsconfig = {
     noFallthroughCasesInSwitch: true,
     noEmitOnError: true,
     forceConsistentCasingInFileNames: true,
-    skipLibCheck: true
+    skipLibCheck: true,
   },
   include: ['src'],
-  exclude: ['node_modules']
+  exclude: ['node_modules'],
 }
 
 export const typescriptPlugin: Plugin = {
@@ -37,7 +37,7 @@ export const typescriptPlugin: Plugin = {
     await npmPackage.addLatestDevDependencies({
       typescript: '^3.4.1',
       'ts-node': '^8.0.3',
-      '@types/node': '^11.13.0'
+      '@types/node': '^11.13.0',
     })
 
     root.addChild(
@@ -46,5 +46,5 @@ export const typescriptPlugin: Plugin = {
 
     npmPackage.addPatch('scripts.build', PatchStrategy.persist, 'tsc')
     npmPackage.addPatch('scripts.lint', PatchStrategy.persist, 'tsc --noEmit')
-  }
+  },
 }

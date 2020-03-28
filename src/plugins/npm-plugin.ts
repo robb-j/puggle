@@ -11,20 +11,20 @@ export const npmPlugin: Plugin = {
         type: 'text',
         name: 'packageName',
         message: 'package name',
-        initial: targetName
+        initial: targetName,
       },
       {
         type: 'text',
         name: 'packageInfo',
         message: 'package description',
-        initial: ''
+        initial: '',
       },
       {
         type: 'text',
         name: 'repository',
         message: 'git repository',
-        initial: ''
-      }
+        initial: '',
+      },
     ])
 
     let pkg = new VPackageJson()
@@ -33,5 +33,5 @@ export const npmPlugin: Plugin = {
     pkg.addPatch('repository', PatchStrategy.placeholder, repository)
 
     root.addChild(pkg)
-  }
+  },
 }

@@ -7,7 +7,7 @@ import {
   prettierPlugin,
   eslintPlugin,
   gitPlugin,
-  dockerPlugin
+  dockerPlugin,
 } from '../plugins'
 
 const indexJs = (name: string) => trimInlineTemplate`
@@ -67,7 +67,7 @@ export const testPreset: Preset = {
     jestPlugin,
     prettierPlugin,
     eslintPlugin,
-    dockerPlugin
+    dockerPlugin,
   ],
 
   async apply(root: VDir, { targetName }) {
@@ -75,7 +75,7 @@ export const testPreset: Preset = {
 
     await Promise.all([
       npmPackage.addLatestDependencies({ dotenv: '^8.0.0' }),
-      npmPackage.addLatestDevDependencies({ nodemon: '^1.19.1' })
+      npmPackage.addLatestDevDependencies({ nodemon: '^1.19.1' }),
     ])
 
     npmPackage.addPatch('main', PatchStrategy.placeholder, 'src/index.js')
@@ -95,15 +95,15 @@ export const testPreset: Preset = {
       new VFile('README.md', readme(targetName)),
       new VDir('src', [
         new VDir('__tests__', [new VFile('index.spec.js', indexSpecJs())]),
-        new VFile('index.js', indexJs(targetName))
+        new VFile('index.js', indexJs(targetName)),
       ]),
       new VFile('.editorconfig', editorconfig()),
       new VIgnoreFile('.gitignore', 'Ignore files from git source control', [
         'node_modules',
         'coverage',
         '*.env',
-        '.DS_Store'
+        '.DS_Store',
       ])
     )
-  }
+  },
 }

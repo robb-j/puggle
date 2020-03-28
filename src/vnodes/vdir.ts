@@ -51,13 +51,13 @@ export class VDir extends VNode {
     const dir = join(basePath, this.name)
     await ensureDir(dir)
 
-    await Promise.all(this.children.map(child => child.writeToFile(dir)))
+    await Promise.all(this.children.map((child) => child.writeToFile(dir)))
   }
 
   async patchFile(basePath: string): Promise<void> {
     const dir = join(basePath, this.name)
     await ensureDir(dir)
 
-    await Promise.all(this.children.map(child => child.patchFile(dir)))
+    await Promise.all(this.children.map((child) => child.patchFile(dir)))
   }
 }

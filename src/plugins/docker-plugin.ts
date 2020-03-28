@@ -64,5 +64,5 @@ export const dockerPlugin: Plugin = {
         ignoreRules
       )
     )
-  }
+  },
 }

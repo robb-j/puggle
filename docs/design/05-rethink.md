@@ -54,7 +54,7 @@ It stores a `PatchStrategy` which determines what it does
 ```ts
 enum PatchStrategy {
   persist,
-  placeholder
+  placeholder,
 }
 
 interface VNode {
@@ -84,7 +84,7 @@ This would change how the plugins applies changes to virtual values.
 ```ts
 enum VConfigType {
   json,
-  yaml
+  yaml,
 }
 
 interface VConfigPatch {
@@ -120,7 +120,7 @@ function apply(root: VDir, ctx: PluginContext) {
 
   // Add a fixed array "pets" which will persist
   conf.addPatch('geoff.pets', PatchStrategy.persist, [
-    { name: 'Sandie', animal: 'Dog' }
+    { name: 'Sandie', animal: 'Dog' },
   ])
 }
 ```

@@ -10,11 +10,11 @@ jest.mock('glob', () =>
 
 const fakeExec = {
   stdout: join(__dirname, '../__fake_presets__'),
-  stderr: ''
+  stderr: '',
 }
 
 jest.mock('child_process', () => ({
-  exec: jest.fn((cmd, cb) => cb(null, fakeExec))
+  exec: jest.fn((cmd, cb) => cb(null, fakeExec)),
 }))
 
 describe('#loadPresets', () => {
@@ -24,7 +24,7 @@ describe('#loadPresets', () => {
     expect(results).toContainEqual({
       name: 'mock-preset',
       version: '1.2.3',
-      apply: expect.any(Function)
+      apply: expect.any(Function),
     })
   })
   it('should process preset arrays', async () => {
@@ -33,12 +33,12 @@ describe('#loadPresets', () => {
     expect(results).toContainEqual({
       name: 'list-preset-a',
       version: '1.2.3',
-      apply: expect.any(Function)
+      apply: expect.any(Function),
     })
     expect(results).toContainEqual({
       name: 'list-preset-b',
       version: '1.2.3',
-      apply: expect.any(Function)
+      apply: expect.any(Function),
     })
   })
 })

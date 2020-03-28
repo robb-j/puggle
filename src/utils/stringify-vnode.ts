@@ -20,7 +20,7 @@ export function stringifyVNode(node: VNode, depth = 0): string {
   //
   if (Array.isArray(children)) {
     const stringifiedChildren = children
-      .map(child =>
+      .map((child) =>
         indentString(dirSeperator + stringifyVNode(child, depth + 1), depth)
       )
       .join('\n')

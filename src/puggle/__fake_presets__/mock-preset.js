@@ -3,5 +3,5 @@
 module.exports = {
   name: 'mock-preset',
   version: '1.2.3',
-  apply() {}
+  apply() {},
 }

@@ -27,12 +27,12 @@ export const defaultPackage = {
   author: '',
   license: 'MIT',
   scripts: {
-    test: 'echo "Not implemented"; exit 1'
+    test: 'echo "Not implemented"; exit 1',
   },
   keywords: [],
   engines: { node: '>=8' } as StringKeyed,
   dependencies: {},
-  devDependencies: {}
+  devDependencies: {},
 }
 
 export class VPackageJson extends VConfigFile {
@@ -50,7 +50,7 @@ export class VPackageJson extends VConfigFile {
 
   constructor() {
     super('package.json', VConfigType.json, null, {
-      strategy: PatchStrategy.persist
+      strategy: PatchStrategy.persist,
     })
     this.values = { ...defaultPackage }
   }

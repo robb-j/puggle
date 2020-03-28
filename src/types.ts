@@ -12,7 +12,7 @@ export interface PuggleOptions {
 
 export enum PatchStrategy {
   persist,
-  placeholder
+  placeholder,
 }
 
 export interface PluginContext {
@@ -74,5 +74,5 @@ export interface Puggle {
 
 export enum VFileType {
   persist,
-  placeholder
+  placeholder,
 }

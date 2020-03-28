@@ -11,7 +11,7 @@ export const prettierPlugin: Plugin = {
     await npmPackage.addLatestDevDependencies({
       prettier: '^1.16.4',
       yorkie: '^2.0.0',
-      'lint-staged': '^8.1.4'
+      'lint-staged': '^8.1.4',
     })
 
     const matcher = '*.{js,json,css,md,ts,tsx}'
@@ -19,19 +19,19 @@ export const prettierPlugin: Plugin = {
     // Add a prettier config to the package.json
     npmPackage.addPatch('prettier', PatchStrategy.persist, {
       semi: false,
-      singleQuote: true
+      singleQuote: true,
     })
 
     //
     // Add a husky config to run lint-staged before commits
     //
     npmPackage.addPatch('gitHooks', PatchStrategy.persist, {
-      'pre-commit': 'lint-staged'
+      'pre-commit': 'lint-staged',
     })
 
     // Add a lint-staged config to run prettier
     npmPackage.addPatch('lint-staged', PatchStrategy.persist, {
-      [matcher]: ['prettier --write', 'git add']
+      [matcher]: ['prettier --write', 'git add'],
     })
 
     // Add an npm script to run prettier
@@ -52,5 +52,5 @@ export const prettierPlugin: Plugin = {
         ignoreRules
       )
     )
-  }
+  },
 }

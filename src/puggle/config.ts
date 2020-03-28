@@ -18,10 +18,10 @@ export function makeConfig(preset: Preset, targetName: string): PuggleConfig {
     projectName: targetName,
     preset: {
       name: preset.name,
-      version: preset.version
+      version: preset.version,
     },
     plugins: plugins,
-    params: {}
+    params: {},
   }
 }
 

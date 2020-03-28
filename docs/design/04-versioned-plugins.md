@@ -13,7 +13,7 @@ class PrettierV2 extends Plugin {
 
 export default new VersionedPlugin({
   '0.1.0': PrettierV1,
-  '0.2.0': PrettierV2
+  '0.2.0': PrettierV2,
 })
 ```
 

@@ -6,7 +6,7 @@ import {
   VIgnoreFile,
   VDir,
   VConfigFile,
-  VConfigType
+  VConfigType,
 } from '../vnodes'
 
 export const testJsFile = trimInlineTemplate`
@@ -23,8 +23,8 @@ export const testIgnore = trimInlineTemplate`
 
 export const testConfig = {
   geoff: {
-    name: 'Geoff'
-  }
+    name: 'Geoff',
+  },
 }
 
 export const testPlugin: Plugin = {
@@ -34,7 +34,7 @@ export const testPlugin: Plugin = {
     root.addChild(
       new VIgnoreFile('.gitignore', 'ignore', ['dist'], PatchStrategy.persist)
     )
-  }
+  },
 }
 
 export const testPreset: Preset = {
@@ -44,19 +44,19 @@ export const testPreset: Preset = {
   async apply(root, ctx) {
     let conf = new VConfigFile('config.json', VConfigType.yaml, testConfig, {
       comment: 'my config',
-      strategy: PatchStrategy.persist
+      strategy: PatchStrategy.persist,
     })
 
     conf.addPatch('geoff.pets', PatchStrategy.placeholder, [
-      { name: 'bonny', animal: 'dog' }
+      { name: 'bonny', animal: 'dog' },
     ])
 
     conf.addPatch('tim', PatchStrategy.persist, { name: 'Tim' })
 
     let js = new VDir('src', [
-      new VFile('index.js', testJsFile, PatchStrategy.placeholder)
+      new VFile('index.js', testJsFile, PatchStrategy.placeholder),
     ])
 
     root.addChild(conf, js)
-  }
+  },
 }

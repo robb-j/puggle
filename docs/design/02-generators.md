@@ -15,7 +15,7 @@ class RobbJNodeJs extends Generator {
     NodeJsDockerPlugin,
     PrettierPlugin,
     ESLintPlugin,
-    JestPlugin
+    JestPlugin,
   ]
 
   // Optional?

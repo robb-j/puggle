@@ -17,7 +17,7 @@ import { PatchStrategy } from '../types'
  */
 export enum VConfigType {
   json = 'json',
-  yaml = 'yaml'
+  yaml = 'yaml',
 }
 
 export interface VConfigPatch {
@@ -58,7 +58,7 @@ export class VConfigFile extends VFile {
     let mergedValues = clone(values)
 
     const isPrimative = (v: any) =>
-      ['string', 'number', 'boolean'].some(type => typeof v === type)
+      ['string', 'number', 'boolean'].some((type) => typeof v === type)
 
     for (let patch of patches) {
       let value = get(mergedValues, patch.path)
@@ -120,7 +120,7 @@ export class VConfigFile extends VFile {
 
     let mergedValues = VConfigFile.applyPatches(
       values,
-      this.patches.filter(p => p.strategy === PatchStrategy.persist)
+      this.patches.filter((p) => p.strategy === PatchStrategy.persist)
     )
 
     // Serialize the updated values here ...

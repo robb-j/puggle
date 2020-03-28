@@ -13,7 +13,7 @@ describe('#findFileConflicts', () => {
 
     let dir = new VDir('root', [
       new VNode('script.js'),
-      new VDir('src', [new VNode('index.js')])
+      new VDir('src', [new VNode('index.js')]),
     ])
 
     let conflicts = await findFileConflicts('.', dir)

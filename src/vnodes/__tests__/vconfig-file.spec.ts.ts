@@ -11,8 +11,8 @@ jest.mock('fs-extra')
 const fakeJson = JSON.stringify({
   geoff: {
     name: 'geoff',
-    age: 40
-  }
+    age: 40,
+  },
 })
 
 describe('VConfigFile', () => {
@@ -56,28 +56,28 @@ describe('VConfigFile', () => {
   describe('.applyPatches', () => {
     it('should merge objects', () => {
       const patches = [
-        { path: 'geoff', strategy: PatchStrategy.persist, data: { age: 42 } }
+        { path: 'geoff', strategy: PatchStrategy.persist, data: { age: 42 } },
       ]
       const values = {
         geoff: {
           name: 'geoff',
-          age: 40
-        }
+          age: 40,
+        },
       }
 
       const result = VConfigFile.applyPatches(values, patches)
 
       expect(result.geoff).toEqual({
         name: 'geoff',
-        age: 42
+        age: 42,
       })
     })
     it('should merge primatives', () => {
       const patches = [
-        { path: 'geoff.age', strategy: PatchStrategy.persist, data: 42 }
+        { path: 'geoff.age', strategy: PatchStrategy.persist, data: 42 },
       ]
       const values = {
-        geoff: { age: 30 }
+        geoff: { age: 30 },
       }
 
       const result = VConfigFile.applyPatches(values, patches)
@@ -89,21 +89,21 @@ describe('VConfigFile', () => {
         {
           path: 'geoff.pets',
           strategy: PatchStrategy.persist,
-          data: [{ name: 'bonny', animal: 'dog' }]
-        }
+          data: [{ name: 'bonny', animal: 'dog' }],
+        },
       ]
       const values = {
         geoff: {
           name: 'geoff',
-          age: 40
-        }
+          age: 40,
+        },
       }
 
       const result = VConfigFile.applyPatches(values, patches)
 
       expect(result.geoff.pets).toContainEqual({
         name: 'bonny',
-        animal: 'dog'
+        animal: 'dog',
       })
     })
   })
@@ -133,7 +133,7 @@ describe('VConfigFile', () => {
       expect(config.patches).toContainEqual({
         path: 'some.path',
         strategy: PatchStrategy.placeholder,
-        data: { some: 'value' }
+        data: { some: 'value' },
       })
     })
   })
@@ -178,12 +178,12 @@ describe('VConfigFile', () => {
       })
 
       let config = new VConfigFile('config.json', VConfigType.json, {
-        geoff: { name: 'geoff' }
+        geoff: { name: 'geoff' },
       })
 
       config.addPatch('geoff.age', PatchStrategy.persist, 42)
       config.addPatch('geoff.pets', PatchStrategy.persist, [
-        { name: 'bonny', animal: 'dog' }
+        { name: 'bonny', animal: 'dog' },
       ])
 
       await config.patchFile('some/dir')
@@ -193,7 +193,7 @@ describe('VConfigFile', () => {
       expect(result.geoff).toEqual({
         name: 'geoff',
         age: 42,
-        pets: [{ name: 'bonny', animal: 'dog' }]
+        pets: [{ name: 'bonny', animal: 'dog' }],
       })
     })
   })

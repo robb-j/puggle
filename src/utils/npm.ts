@@ -10,7 +10,7 @@ export async function findLatestPackageVersion(
 ): Promise<string> {
   const npmPackage = await got(REGISTRY_URL + packageName, { json: true })
 
-  const allMatches = Object.keys(npmPackage.body.versions).filter(version =>
+  const allMatches = Object.keys(npmPackage.body.versions).filter((version) =>
     semver.satisfies(version, semverRange)
   )
 
@@ -30,7 +30,7 @@ export async function findLatestPackageVersion(
 export async function findLatestDependencies(
   dependencies: StringKeyed<string>
 ) {
-  const promises = Object.keys(dependencies).map(async key => {
+  const promises = Object.keys(dependencies).map(async (key) => {
     const version = await findLatestPackageVersion(key, dependencies[key]!)
     return { [key]: version }
   })

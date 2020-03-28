@@ -24,17 +24,17 @@ export async function loadPresets(): Promise<Preset[]> {
 export async function pickPreset(presets: Preset[]): Promise<Preset> {
   const choiceify = (p: Preset) => ({
     title: p.name,
-    value: p.name
+    value: p.name,
   })
 
   let { chosenName } = await prompts({
     type: 'select',
     name: 'chosenName',
     message: 'preset',
-    choices: presets.map(choiceify)
+    choices: presets.map(choiceify),
   })
 
-  let chosen = presets.find(p => p.name === chosenName)
+  let chosen = presets.find((p) => p.name === chosenName)
 
   if (!chosen) throw new Error('No preset chosen')
 
