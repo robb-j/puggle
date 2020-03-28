@@ -1,4 +1,5 @@
 import prompts from 'prompts'
+import { basename } from 'path'
 import { Puggle, PatchStrategy } from '../types'
 import { makeConfig, loadConfig } from './config'
 import { VConfigFile, VConfigType, VDir } from '../vnodes'
@@ -13,6 +14,7 @@ export const puggle: Puggle = {
           type: 'text',
           name: 'targetName',
           message: 'project name',
+          initial: basename(targetPath === '.' ? process.cwd() : targetPath),
         },
       ],
       promptsExitProcess
