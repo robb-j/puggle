@@ -8,7 +8,7 @@ import set from 'lodash.set'
 import merge from 'lodash.merge'
 import clone from 'lodash.clonedeep'
 
-import { trimInlineTemplate } from '../utils'
+import { trimInlineTemplate, readFileOrNull } from '../utils'
 import { VFile } from './vfile'
 import { PatchStrategy } from '../types'
 
@@ -116,10 +116,11 @@ export class VConfigFile extends VFile {
 
     let path = join(basePath, this.name)
 
-    let values = Yaml.parse(await readFile(path, 'utf8'))
+    let existingFile = await readFileOrNull(path, 'utf8')
+    if (!existingFile) return this.writeToFile(basePath)
 
     let mergedValues = VConfigFile.applyPatches(
-      values,
+      Yaml.parse(existingFile!),
       this.patches.filter((p) => p.strategy === PatchStrategy.persist)
     )
 

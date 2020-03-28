@@ -2,7 +2,7 @@ import { join } from 'path'
 import { readFile, writeFile } from 'fs-extra'
 
 import { VFile } from './vfile'
-import { trimInlineTemplate } from '../utils'
+import { trimInlineTemplate, readFileOrNull } from '../utils'
 import { PatchStrategy } from '../types'
 
 /**
@@ -50,7 +50,8 @@ export class VIgnoreFile extends VFile {
 
     const path = join(basePath, this.name)
 
-    const contents = await readFile(path, 'utf8')
+    const contents = await readFileOrNull(path, 'utf8')
+    if (!contents) return this.writeToFile(basePath)
 
     const mergedRules = new Set<string>([
       ...this.rules,

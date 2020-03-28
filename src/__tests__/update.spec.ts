@@ -69,6 +69,10 @@ describe('puggle init', () => {
     mocked(readFile).mockImplementation((path) => mockedFiles.get(path as any))
   })
 
+  afterEach(() => {
+    mocked(readFile).mockReset()
+  })
+
   it('should merge persited files', async () => {
     await puggle.update('root', [testPreset], testOpts)
 

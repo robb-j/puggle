@@ -1,4 +1,5 @@
 import { StringKeyed } from '../types'
+import { readFile } from 'fs-extra'
 
 export * from './trim-inline-template'
 export * from './find-file-conflicts'
@@ -42,6 +43,24 @@ export function sortObjectKeys<T extends StringKeyed>(input: T): T {
   return output
 }
 
+/**
+ * Common options for the prompts library
+ * - it enforces a process.exit if the user cancels
+ */
 export const promptsExitProcess = {
   onCancel: () => process.exit(1),
+}
+
+/**
+ * Try to read a file or return null if it doesn't exist
+ */
+export const readFileOrNull = async (path: string, encoding: string) => {
+  try {
+    // For some reason .catch isn't a function
+    // so you have to await it here and catch instead
+    const data = await readFile(path, encoding)
+    return data
+  } catch (error) {
+    return null
+  }
 }

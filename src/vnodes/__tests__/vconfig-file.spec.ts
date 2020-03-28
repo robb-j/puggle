@@ -148,10 +148,19 @@ describe('VConfigFile', () => {
   })
 
   describe('#patchFile', () => {
+    const persistOpts = {
+      strategy: PatchStrategy.persist,
+    }
+
     it('should read the target file', async () => {
       mocked(readFile).mockResolvedValueOnce(fakeJson as any)
 
-      let config = new VConfigFile('config.json', VConfigType.json, {})
+      let config = new VConfigFile(
+        'config.json',
+        VConfigType.json,
+        {},
+        persistOpts
+      )
 
       await config.patchFile('some/dir')
 
@@ -160,7 +169,12 @@ describe('VConfigFile', () => {
     it('should write the patched file', async () => {
       mocked(readFile).mockResolvedValueOnce(fakeJson as any)
 
-      let config = new VConfigFile('config.json', VConfigType.json, {})
+      let config = new VConfigFile(
+        'config.json',
+        VConfigType.json,
+        {},
+        persistOpts
+      )
 
       await config.patchFile('some/dir')
 
@@ -177,9 +191,12 @@ describe('VConfigFile', () => {
         writtenFile = data
       })
 
-      let config = new VConfigFile('config.json', VConfigType.json, {
-        geoff: { name: 'geoff' },
-      })
+      let config = new VConfigFile(
+        'config.json',
+        VConfigType.json,
+        { geoff: { name: 'geoff' } },
+        persistOpts
+      )
 
       config.addPatch('geoff.age', PatchStrategy.persist, 42)
       config.addPatch('geoff.pets', PatchStrategy.persist, [
@@ -195,6 +212,20 @@ describe('VConfigFile', () => {
         age: 42,
         pets: [{ name: 'bonny', animal: 'dog' }],
       })
+    })
+    it("should just write the file if it does't exist", async () => {
+      mocked(readFile).mockRejectedValueOnce(new Error('Not found'))
+
+      let config = new VConfigFile(
+        'config.json',
+        VConfigType.json,
+        {},
+        persistOpts
+      )
+
+      await config.patchFile('some/dir')
+
+      expect(readFile).toBeCalledWith('some/dir/config.json', 'utf8')
     })
   })
 })

@@ -126,5 +126,20 @@ describe('VIgnoreFile', () => {
       expect(result).toMatch(/^dist$/m)
       expect(result).toMatch(/^.cache$/m)
     })
+
+    it("should create a new file if it does't exist", async () => {
+      mocked(readFile).mockRejectedValueOnce(new Error('not found'))
+
+      const ignore = new VIgnoreFile(
+        '.ignore',
+        'some info',
+        ['dist'],
+        PatchStrategy.persist
+      )
+
+      await ignore.patchFile('some/dir')
+
+      expect(readFile).toBeCalledWith('some/dir/.ignore', 'utf8')
+    })
   })
 })
