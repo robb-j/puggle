@@ -1,9 +1,6 @@
 import prompts from 'prompts'
 import { Preset, PuggleConfig, PluginContext } from '../types'
-
-const promptOptions = {
-  onCancel: () => process.exit(1),
-}
+import { promptsExitProcess } from '../utils'
 
 export function makePluginContext(
   preset: Preset,
@@ -19,7 +16,7 @@ export function makePluginContext(
       let previous = config.params[ns] || {}
 
       let missing = qs.filter((q) => previous[q.name] === undefined)
-      let rest = await prompts(missing, promptOptions)
+      let rest = await prompts(missing, promptsExitProcess)
 
       config.params[ns] = { ...previous, ...rest }
 

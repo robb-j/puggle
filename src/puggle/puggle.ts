@@ -2,12 +2,8 @@ import prompts from 'prompts'
 import { Puggle } from '../types'
 import { makeConfig, loadConfig } from './config'
 import { VConfigFile, VConfigType, VDir } from '../vnodes'
-import { stringifyVNode, findFileConflicts } from '../utils'
+import { stringifyVNode, findFileConflicts, promptsExitProcess } from '../utils'
 import { makePluginContext } from './context'
-
-const promptOptions = {
-  onCancel: () => process.exit(1),
-}
 
 export const puggle: Puggle = {
   async init(preset, targetPath, options = {}) {
@@ -19,7 +15,7 @@ export const puggle: Puggle = {
           message: 'project name',
         },
       ],
-      promptOptions
+      promptsExitProcess
     )
 
     const config = makeConfig(preset, targetName)
@@ -33,11 +29,14 @@ export const puggle: Puggle = {
 
     if (options.dryRun) return console.log(stringifyVNode(vfs))
 
-    let { confirmed } = await prompts({
-      type: 'confirm',
-      name: 'confirmed',
-      message: `Initialize project into '${targetPath}'?`,
-    })
+    let { confirmed } = await prompts(
+      {
+        type: 'confirm',
+        name: 'confirmed',
+        message: `Initialize project into '${targetPath}'?`,
+      },
+      promptsExitProcess
+    )
 
     if (!confirmed) process.exit(1)
 
@@ -68,11 +67,14 @@ export const puggle: Puggle = {
       newConfig
     )
 
-    let { confirmed } = await prompts({
-      type: 'confirm',
-      name: 'confirmed',
-      message: `Update project at '${targetPath}'?`,
-    })
+    let { confirmed } = await prompts(
+      {
+        type: 'confirm',
+        name: 'confirmed',
+        message: `Update project at '${targetPath}'?`,
+      },
+      promptsExitProcess
+    )
 
     if (!confirmed) process.exit(1)
 

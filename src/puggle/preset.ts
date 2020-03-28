@@ -3,6 +3,7 @@ import { join } from 'path'
 import { promisify } from 'util'
 import prompts = require('prompts')
 import { Preset } from '../types'
+import { promptsExitProcess } from '../utils'
 
 const glob = promisify(require('glob'))
 const exec = promisify(require('child_process').exec)
@@ -27,12 +28,15 @@ export async function pickPreset(presets: Preset[]): Promise<Preset> {
     value: p.name,
   })
 
-  let { chosenName } = await prompts({
-    type: 'select',
-    name: 'chosenName',
-    message: 'preset',
-    choices: presets.map(choiceify),
-  })
+  let { chosenName } = await prompts(
+    {
+      type: 'select',
+      name: 'chosenName',
+      message: 'preset',
+      choices: presets.map(choiceify),
+    },
+    promptsExitProcess
+  )
 
   let chosen = presets.find((p) => p.name === chosenName)
 

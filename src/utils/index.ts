@@ -41,3 +41,7 @@ export function sortObjectKeys<T extends StringKeyed>(input: T): T {
 
   return output
 }
+
+export const promptsExitProcess = {
+  onCancel: () => process.exit(1),
+}
