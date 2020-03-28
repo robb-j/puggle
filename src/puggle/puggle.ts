@@ -10,7 +10,7 @@ const promptOptions = {
 }
 
 export const puggle: Puggle = {
-  async init(preset, targetPath = '.', options = {}) {
+  async init(preset, targetPath, options = {}) {
     let { targetName } = await prompts(
       [
         {
