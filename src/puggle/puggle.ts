@@ -10,7 +10,7 @@ const promptOptions = {
 }
 
 export const puggle: Puggle = {
-  async init(preset, targetPath, options = {}) {
+  async init(preset, targetPath = '.', options = {}) {
     let { targetName } = await prompts(
       [
         {
@@ -21,8 +21,6 @@ export const puggle: Puggle = {
       ],
       promptOptions
     )
-
-    if (targetPath === '.') targetPath = process.cwd()
 
     const config = makeConfig(preset, targetName)
     const vfs = await puggle.generateVfs(preset, targetName, targetPath, config)

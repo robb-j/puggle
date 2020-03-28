@@ -72,4 +72,10 @@ describe('puggle init', () => {
     )
     expect(writeFile).toBeCalledWith('root/puggle.json', config)
   })
+
+  it('should init with a custom directory', async () => {
+    await puggle.init(testPreset, '.', testOpts)
+
+    expect(writeFile).toBeCalledWith('config.json', expect.any(String))
+  })
 })
