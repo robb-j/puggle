@@ -30,9 +30,9 @@ export async function findLatestPackageVersion(
 export async function findLatestDependencies(
   dependencies: StringKeyed<string>
 ) {
-  const promises = Object.keys(dependencies).map(async (key) => {
-    const version = await findLatestPackageVersion(key, dependencies[key]!)
-    return { [key]: version }
+  const promises = Object.entries(dependencies).map(async ([key, value]) => {
+    const version = await findLatestPackageVersion(key, value)
+    return { [key]: `^${version}` }
   })
 
   const versions = await Promise.all(promises)
