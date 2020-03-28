@@ -91,4 +91,18 @@ describe('puggle init', () => {
       expect.any(String)
     )
   })
+
+  it('should update the puggle.json', async () => {
+    const updatedTestPreset = {
+      ...testPreset,
+      version: '9.9.9-preset',
+    }
+
+    await puggle.update('root', [updatedTestPreset], testOpts)
+
+    expect(writeFile).toBeCalledWith(
+      'root/puggle.json',
+      expect.stringContaining('9.9.9-preset')
+    )
+  })
 })

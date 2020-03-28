@@ -1,5 +1,5 @@
 import prompts from 'prompts'
-import { Puggle } from '../types'
+import { Puggle, PatchStrategy } from '../types'
 import { makeConfig, loadConfig } from './config'
 import { VConfigFile, VConfigType, VDir } from '../vnodes'
 import { stringifyVNode, findFileConflicts, promptsExitProcess } from '../utils'
@@ -76,6 +76,13 @@ export const puggle: Puggle = {
       promptsExitProcess
     )
 
+    let puggleJson = vfs.find('puggle.json') as VConfigFile
+    if (!puggleJson) throw new Error('puggle.json was removed')
+
+    for (const [key, value] of Object.entries(newConfig)) {
+      puggleJson.addPatch(key, PatchStrategy.persist, value)
+    }
+
     if (!confirmed) process.exit(1)
 
     await vfs.patchFile('.')
@@ -96,7 +103,11 @@ export const puggle: Puggle = {
 
     await preset.apply(root, ctx)
 
-    root.addChild(new VConfigFile('puggle.json', VConfigType.json, config))
+    root.addChild(
+      new VConfigFile('puggle.json', VConfigType.json, config, {
+        strategy: PatchStrategy.persist,
+      })
+    )
 
     return root
   },
