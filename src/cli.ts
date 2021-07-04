@@ -34,7 +34,8 @@ yargs
     (yargs) =>
       yargs.positional('path', {
         type: 'string',
-        describe: 'Where to initialize into',
+        describe:
+          'Where to initialize into (use "." for the current directory)',
         demandOption: true,
       }),
     async ({ path, dryRun }) => {
@@ -52,7 +53,8 @@ yargs
     (yargs) =>
       yargs.positional('path', {
         type: 'string',
-        describe: 'Where the puggle project to update is',
+        describe:
+          'Where the puggle project to update is (use "." for the current directory)',
         demandOption: true,
       }),
     async ({ path, dryRun }) => {
