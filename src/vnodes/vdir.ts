@@ -1,5 +1,4 @@
 import { join } from 'path'
-import { promisify } from 'util'
 
 import { VNode } from './vnode'
 import { trimSlashes } from '../utils'

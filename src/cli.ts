@@ -85,7 +85,7 @@ if (process.env.NODE_ENV === 'development') {
         .positional('path', { type: 'string', default: '.' })
         .option('dryRun', { type: 'boolean', default: false }),
     async ({ dryRun, path }) => {
-      console.log('Using test preset')
+      console.log('[debug] using test preset')
 
       await puggle.init(testPreset, path, { dryRun })
     }
@@ -99,7 +99,7 @@ if (process.env.NODE_ENV === 'development') {
         .positional('path', { type: 'string', default: '.' })
         .option('dryRun', { type: 'boolean', default: false }),
     async ({ dryRun, path }) => {
-      console.log('Using test preset')
+      console.log('[debug] using test preset')
 
       await puggle.update(path, [testPreset], { dryRun })
     }

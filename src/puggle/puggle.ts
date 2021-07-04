@@ -1,4 +1,5 @@
 import prompts from 'prompts'
+import semver from 'semver'
 import { basename } from 'path'
 import { Puggle, PatchStrategy } from '../types'
 import { makeConfig, loadConfig } from './config'
@@ -36,6 +37,7 @@ export const puggle: Puggle = {
         type: 'confirm',
         name: 'confirmed',
         message: `Initialize project into '${targetPath}'?`,
+        initial: true,
       },
       promptsExitProcess
     )
@@ -52,6 +54,10 @@ export const puggle: Puggle = {
   async update(targetPath, presets, options = {}) {
     const oldConfig = loadConfig(targetPath)
 
+    console.log(
+      `Puggle project '${oldConfig.projectName}' found using ${oldConfig.preset.name}@${oldConfig.preset.version}`
+    )
+
     let preset = presets.find((p) => p.name === oldConfig.preset.name)!
 
     if (preset === undefined) {
@@ -61,6 +67,19 @@ export const puggle: Puggle = {
 
     let newConfig = makeConfig(preset, oldConfig.projectName)
     newConfig.params = oldConfig.params
+
+    const oldVersion = oldConfig.preset.version
+    const newVersion = newConfig.preset.version
+
+    if (semver.gte(oldVersion, newVersion)) {
+      console.log(`No updates available`)
+      process.exit(1)
+    }
+
+    if (semver.diff(oldVersion, newVersion) === 'major') {
+      console.log(`Cannot update from '${oldVersion}' to '${newVersion}'`)
+      process.exit(1)
+    }
 
     let vfs = await puggle.generateVfs(
       preset,
@@ -73,7 +92,7 @@ export const puggle: Puggle = {
       {
         type: 'confirm',
         name: 'confirmed',
-        message: `Update project at '${targetPath}'?`,
+        message: `Update '${newConfig.projectName}' to ${newConfig.preset.name}@${newVersion}?`,
       },
       promptsExitProcess
     )

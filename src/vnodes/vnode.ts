@@ -1,7 +1,7 @@
 import { trimSlashes } from '../utils'
 
 /**
- * The base class of virual filesystem nodes, doesn't do very much
+ * The base class of virtual filesystem nodes, doesn't do very much
  * Other things extend this and add functionality
  */
 export class VNode {
