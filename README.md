@@ -1,6 +1,6 @@
 # Puggle
 
-[![Build Status](https://circleci.com/gh/robb-j/puggle.svg?style=svg)](https://circleci.com/gh/robb-j/puggle)
+[![Automated Tests](https://github.com/robb-j/puggle/actions/workflows/ci.yml/badge.svg)](https://github.com/robb-j/puggle/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/robb-j/puggle/badge.svg?branch=master)](https://coveralls.io/github/robb-j/puggle?branch=master)
 
 A CLI for bootstrapping and keeping project tooling up-to-date.
