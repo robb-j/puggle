@@ -8,8 +8,8 @@ jest.mock('fs-extra')
 
 describe('#findFileConflicts', () => {
   it('should return vnodes that conflict with files', async () => {
-    mocked(readdir).mockResolvedValueOnce(['script.js', 'src', 'some.css'])
-    mocked(readdir).mockResolvedValueOnce(['index.js'])
+    mocked<any>(readdir).mockResolvedValueOnce(['script.js', 'src', 'some.css'])
+    mocked<any>(readdir).mockResolvedValueOnce(['index.js'])
 
     let dir = new VDir('root', [
       new VNode('script.js'),

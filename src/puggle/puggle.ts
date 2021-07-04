@@ -9,6 +9,10 @@ import { makePluginContext } from './context'
 
 export const puggle: Puggle = {
   async init(preset, targetPath, options = {}) {
+    const log = (...args: unknown[]) => {
+      if (!options.silent) console.log(...args)
+    }
+
     let { targetName } = await prompts(
       [
         {
@@ -46,22 +50,24 @@ export const puggle: Puggle = {
 
     await vfs.writeToFile('.')
 
-    if (!options.silent) {
-      console.log(`Initialized into ${targetName}`)
-    }
+    log(`Initialized into ${targetName}`)
   },
 
   async update(targetPath, presets, options = {}) {
+    const log = (...args: unknown[]) => {
+      if (!options.silent) console.log(...args)
+    }
+
     const oldConfig = loadConfig(targetPath)
 
-    console.log(
+    log(
       `Puggle project '${oldConfig.projectName}' found using ${oldConfig.preset.name}@${oldConfig.preset.version}`
     )
 
     let preset = presets.find((p) => p.name === oldConfig.preset.name)!
 
     if (preset === undefined) {
-      console.log(`preset '${oldConfig.preset.name}' not found`)
+      log(`preset '${oldConfig.preset.name}' not found`)
       process.exit(1)
     }
 
@@ -72,13 +78,11 @@ export const puggle: Puggle = {
     const newVersion = newConfig.preset.version
 
     if (semver.gte(oldVersion, newVersion)) {
-      console.log(`No updates available`)
-      process.exit(1)
+      throw new Error(`No updates available`)
     }
 
     if (semver.diff(oldVersion, newVersion) === 'major') {
-      console.log(`Cannot update from '${oldVersion}' to '${newVersion}'`)
-      process.exit(1)
+      throw new Error(`Cannot update from '${oldVersion}' to '${newVersion}'`)
     }
 
     let vfs = await puggle.generateVfs(
@@ -108,9 +112,7 @@ export const puggle: Puggle = {
 
     await vfs.patchFile('.')
 
-    if (!options.silent) {
-      console.log(`Updated '${newConfig.projectName}'`)
-    }
+    log(`Updated '${newConfig.projectName}'`)
   },
 
   async generateVfs(preset, targetName, targetPath, config) {

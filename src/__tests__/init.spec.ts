@@ -7,8 +7,7 @@ import { writeFile, ensureDir } from 'fs-extra'
 import prompts from 'prompts'
 import yaml from 'yaml'
 
-import { testJsFile, testIgnore, testPreset } from './test-preset'
-import { mocked } from 'ts-jest/utils'
+import { testJsFile, testIgnore, testPreset } from '../utils/mock-preset'
 
 const testOpts = {
   silent: true,

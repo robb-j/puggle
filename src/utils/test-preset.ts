@@ -52,7 +52,7 @@ const readme = (name: string) => trimInlineTemplate`
 
 export const testPreset: Preset = {
   name: 'robb-j:node',
-  version: '0.1.0',
+  version: '0.1.1',
 
   plugins: [npmPlugin],
 

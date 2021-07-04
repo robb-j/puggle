@@ -1,13 +1,6 @@
 import { trimInlineTemplate } from '../utils'
 import { Preset, Plugin, PatchStrategy } from '../types'
-import {
-  VFile,
-  VNode,
-  VIgnoreFile,
-  VDir,
-  VConfigFile,
-  VConfigType,
-} from '../vnodes'
+import { VFile, VIgnoreFile, VDir, VConfigFile, VConfigType } from '../vnodes'
 
 export const testJsFile = trimInlineTemplate`
   console.log('Hello, world!')
@@ -39,7 +32,7 @@ export const testPlugin: Plugin = {
 
 export const testPreset: Preset = {
   name: 'test-preset',
-  version: '9.8.7',
+  version: '1.2.3',
   plugins: [testPlugin],
   async apply(root, ctx) {
     let conf = new VConfigFile('config.json', VConfigType.yaml, testConfig, {

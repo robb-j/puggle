@@ -2,19 +2,14 @@
 // Integration test for puggle.update
 //
 
-import {
-  testJsFile,
-  testIgnore,
-  testConfig,
-  testPlugin,
-  testPreset,
-} from './test-preset'
+import { testPreset } from '../utils/mock-preset'
 import { puggle, makeConfig } from '../puggle'
 import { readFileSync, readFile, writeFile } from 'fs-extra'
 import { mocked } from 'ts-jest/utils'
 import yaml from 'yaml'
 import { trimInlineTemplate } from '../utils'
 import prompts from 'prompts'
+import clone from 'lodash.clonedeep'
 
 const testOpts = {
   silent: true,
@@ -45,10 +40,10 @@ mockedFiles.set(
   })
 )
 
-mockedFiles.set(
-  'root/puggle.json',
-  JSON.stringify(makeConfig(testPreset, 'project-name'))
-)
+const oldPreset = clone(makeConfig(testPreset, 'project-name'))
+oldPreset.preset.version = '1.0.0'
+
+mockedFiles.set('root/puggle.json', JSON.stringify(oldPreset))
 
 const expectedIgnore = trimInlineTemplate`
   #
@@ -59,7 +54,7 @@ const expectedIgnore = trimInlineTemplate`
   .cache
 `
 
-describe('puggle init', () => {
+describe('puggle update', () => {
   beforeEach(() => {
     prompts.inject([true])
 
