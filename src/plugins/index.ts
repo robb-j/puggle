@@ -1,7 +1,1 @@
-export * from './docker-plugin'
-export * from './eslint-plugin'
-export * from './git-plugin'
-export * from './jest-plugin'
 export * from './npm-plugin'
-export * from './prettier-plugin'
-export * from './typescript-plugin'

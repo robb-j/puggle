@@ -1,14 +1,7 @@
 import { Preset, PatchStrategy } from '../types'
 import { trimInlineTemplate } from '../utils'
 import { VFile, VDir, VIgnoreFile, VPackageJson } from '../vnodes'
-import {
-  npmPlugin,
-  jestPlugin,
-  prettierPlugin,
-  eslintPlugin,
-  gitPlugin,
-  dockerPlugin,
-} from '../plugins'
+import { npmPlugin } from '../plugins'
 
 const indexJs = (name: string) => trimInlineTemplate`
   //
@@ -61,14 +54,7 @@ export const testPreset: Preset = {
   name: 'robb-j:node',
   version: '0.1.0',
 
-  plugins: [
-    gitPlugin,
-    npmPlugin,
-    jestPlugin,
-    prettierPlugin,
-    eslintPlugin,
-    dockerPlugin,
-  ],
+  plugins: [npmPlugin],
 
   async apply(root: VDir, { targetName }) {
     let npmPackage = VPackageJson.getOrFail(root)
