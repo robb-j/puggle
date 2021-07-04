@@ -1,0 +1,32 @@
+name: Automated tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: run tests and generate coverage
+        run: |
+          npx jest --coverage --coverageReporters=text-lcov --collectCoverageFrom "src/**/*.ts" | npx coveralls
+
+      - name: run build
+        run: npm run build
