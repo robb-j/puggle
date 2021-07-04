@@ -15,7 +15,7 @@ export async function findLatestPackageVersion(
   )
 
   if (allMatches.length === 0) {
-    throw new Error()
+    throw new Error(`${packageName}: '${semverRange}' matches no versions`)
   }
 
   allMatches.sort((a, b) => {
