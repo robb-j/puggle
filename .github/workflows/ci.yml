@@ -25,6 +25,9 @@ jobs:
         run: npm ci
 
       - name: run tests and generate coverage
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_SERVICE_NAME: github-actions
         run: |
           npx jest --coverage --coverageReporters=text-lcov --collectCoverageFrom "src/**/*.ts" | npx coveralls
 
