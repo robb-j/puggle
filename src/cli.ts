@@ -25,15 +25,17 @@ yargs
   .scriptName('puggle')
   .alias('i', 'init')
   .alias('u', 'update')
+  .demandCommand()
+  .recommendCommands()
   .help()
   .command(
-    ['init [path]', '$0 [path]'],
+    ['init <path>'],
     'Bootstrap a new project',
     (yargs) =>
       yargs.positional('path', {
         type: 'string',
         describe: 'Where to initialize into',
-        default: '.',
+        demandOption: true,
       }),
     async ({ path, dryRun }) => {
       console.log(initMessage)
@@ -45,13 +47,13 @@ yargs
     }
   )
   .command(
-    'update [path]',
+    'update <path>',
     'Update a project setup with puggle',
     (yargs) =>
       yargs.positional('path', {
         type: 'string',
         describe: 'Where the puggle project to update is',
-        default: '.',
+        demandOption: true,
       }),
     async ({ path, dryRun }) => {
       const presets = await loadPresets()
@@ -73,8 +75,6 @@ yargs
   )
 
 if (process.env.NODE_ENV === 'development') {
-  const { TestPreset } = require('./utils/test-preset')
-
   yargs.command(
     'test:init [path]',
     'Run the cli with a test preset',
