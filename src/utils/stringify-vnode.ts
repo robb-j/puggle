@@ -1,5 +1,5 @@
-import { VNode, VDir } from '../vnodes'
-import chalk from 'chalk'
+import { VNode } from '../vnodes'
+import pc from 'picocolors'
 
 function indentString(input: string, depth: number) {
   let str = ''
@@ -7,11 +7,11 @@ function indentString(input: string, depth: number) {
   return str + input
 }
 
-const dirSeperator = chalk.grey(' └ ')
+const dirSeperator = pc.gray(' └ ')
 
 export function stringifyVNode(node: VNode, depth = 0): string {
   //
-  // Short circuit if the method was overriden
+  // Short circuit if the method was overridden
   //
   const { children } = node as any
 
@@ -25,7 +25,7 @@ export function stringifyVNode(node: VNode, depth = 0): string {
       )
       .join('\n')
 
-    return `${node.name}/ ${chalk.gray(
+    return `${node.name}/ ${pc.gray(
       node.constructor.name
     )}\n${stringifiedChildren}`
   }
@@ -33,5 +33,5 @@ export function stringifyVNode(node: VNode, depth = 0): string {
   //
   // Stringify a single node
   //
-  return `${node.name} ${chalk.grey(node.constructor.name)}`
+  return `${node.name} ${pc.gray(node.constructor.name)}`
 }

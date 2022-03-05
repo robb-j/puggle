@@ -1,5 +1,4 @@
 import { readdir } from 'fs-extra'
-import { mocked } from 'ts-jest/utils'
 
 import { VDir, VNode } from '../../vnodes'
 import { findFileConflicts } from '../find-file-conflicts'
@@ -8,8 +7,10 @@ jest.mock('fs-extra')
 
 describe('#findFileConflicts', () => {
   it('should return vnodes that conflict with files', async () => {
-    mocked<any>(readdir).mockResolvedValueOnce(['script.js', 'src', 'some.css'])
-    mocked<any>(readdir).mockResolvedValueOnce(['index.js'])
+    jest
+      .mocked<any>(readdir)
+      .mockResolvedValueOnce(['script.js', 'src', 'some.css'])
+    jest.mocked<any>(readdir).mockResolvedValueOnce(['index.js'])
 
     let dir = new VDir('root', [
       new VNode('script.js'),

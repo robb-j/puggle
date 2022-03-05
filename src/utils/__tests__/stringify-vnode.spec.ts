@@ -1,23 +1,25 @@
 import { stringifyVNode } from '../stringify-vnode'
 import { VNode, VDir } from '../../vnodes'
-import strip from 'strip-ansi'
+import pc from 'picocolors'
 
 class VCustomNode extends VNode {}
 
+beforeAll(() => {
+  process.env.NO_COLOR = 'true'
+})
+
 describe('#stringifyVNode', () => {
   it('should format a VNode', () => {
-    let result = strip(stringifyVNode(new VNode('geoff')))
+    let result = stringifyVNode(new VNode('geoff'))
     expect(result).toMatch(/geoff VNode/)
   })
 
   it('should format a VDir', () => {
-    let result = strip(
-      stringifyVNode(
-        new VDir('root', [
-          new VNode('file_a'),
-          new VDir('sub_dir', [new VNode('file_b')]),
-        ])
-      )
+    let result = stringifyVNode(
+      new VDir('root', [
+        new VNode('file_a'),
+        new VDir('sub_dir', [new VNode('file_b')]),
+      ])
     )
 
     expect(result).toMatch(/^root\/ VDir$/m)
@@ -27,7 +29,7 @@ describe('#stringifyVNode', () => {
   })
 
   it('should format custom nodes', () => {
-    let result = strip(stringifyVNode(new VCustomNode('geoff')))
+    let result = stringifyVNode(new VCustomNode('geoff'))
     expect(result).toMatch(/geoff VCustomNode/)
   })
 })

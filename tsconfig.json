@@ -1,27 +1,23 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "es2018",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ES2020",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": false,
+    "module": "ES2020",
+
+    "sourceMap": true,
     "declaration": true,
-    "pretty": true,
     "newLine": "lf",
     "stripInternal": true,
+    "pretty": true,
+
     "strict": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "typeRoots": ["@types", "node_modules/@types"]
+    "skipLibCheck": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src"]
 }

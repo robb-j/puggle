@@ -1,7 +1,7 @@
 import { join } from 'path'
 
 import { promisify } from 'util'
-import prompts = require('prompts')
+import prompts from 'prompts'
 import { Preset } from '../types'
 import { promptsExitProcess } from '../utils'
 

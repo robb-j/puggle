@@ -4,7 +4,6 @@ import { VConfigFile, VConfigType, VConfigPatch } from '../vconfig-file'
 import { PatchStrategy } from '../../types'
 
 import { readFile, writeFile } from 'fs-extra'
-import { mocked } from 'ts-jest/utils'
 
 jest.mock('fs-extra')
 
@@ -153,7 +152,7 @@ describe('VConfigFile', () => {
     }
 
     it('should read the target file', async () => {
-      mocked(readFile).mockResolvedValueOnce(fakeJson as any)
+      jest.mocked(readFile).mockResolvedValueOnce(fakeJson as any)
 
       let config = new VConfigFile(
         'config.json',
@@ -167,7 +166,7 @@ describe('VConfigFile', () => {
       expect(readFile).toBeCalledWith('some/dir/config.json', 'utf8')
     })
     it('should write the patched file', async () => {
-      mocked(readFile).mockResolvedValueOnce(fakeJson as any)
+      jest.mocked(readFile).mockResolvedValueOnce(fakeJson as any)
 
       let config = new VConfigFile(
         'config.json',
@@ -184,10 +183,10 @@ describe('VConfigFile', () => {
       )
     })
     it('should merge the files', async () => {
-      mocked(readFile).mockResolvedValueOnce(fakeJson as any)
+      jest.mocked(readFile).mockResolvedValueOnce(fakeJson as any)
 
       let writtenFile = ''
-      mocked(writeFile).mockImplementationOnce((path, data) => {
+      jest.mocked(writeFile).mockImplementationOnce((path, data) => {
         writtenFile = data
       })
 
@@ -214,7 +213,7 @@ describe('VConfigFile', () => {
       })
     })
     it("should just write the file if it does't exist", async () => {
-      mocked(readFile).mockRejectedValueOnce(new Error('Not found'))
+      jest.mocked(readFile).mockRejectedValueOnce(new Error('Not found'))
 
       let config = new VConfigFile(
         'config.json',

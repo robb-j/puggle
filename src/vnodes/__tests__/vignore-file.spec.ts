@@ -2,8 +2,6 @@ import { VIgnoreFile } from '../vignore-file'
 import { PatchStrategy } from '../../types'
 
 import { readFile, writeFile } from 'fs-extra'
-import { trimInlineTemplate } from '../../utils'
-import { mocked } from 'ts-jest/utils'
 
 jest.mock('fs-extra')
 
@@ -75,7 +73,7 @@ describe('VIgnoreFile', () => {
 
   describe('#patchFile', () => {
     it('should read the target file', async () => {
-      mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
+      jest.mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
 
       const ignore = new VIgnoreFile(
         '.ignore',
@@ -90,7 +88,7 @@ describe('VIgnoreFile', () => {
     })
 
     it('should write the patched file', async () => {
-      mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
+      jest.mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
 
       const ignore = new VIgnoreFile(
         '.ignore',
@@ -105,10 +103,10 @@ describe('VIgnoreFile', () => {
     })
 
     it('should merge the ignore files', async () => {
-      mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
+      jest.mocked(readFile).mockResolvedValueOnce(fakeIgnore as any)
 
       let result = ''
-      mocked(writeFile).mockImplementationOnce((path, data) => {
+      jest.mocked(writeFile).mockImplementationOnce((path, data) => {
         result = data
       })
 
@@ -128,7 +126,7 @@ describe('VIgnoreFile', () => {
     })
 
     it("should create a new file if it does't exist", async () => {
-      mocked(readFile).mockRejectedValueOnce(new Error('not found'))
+      jest.mocked(readFile).mockRejectedValueOnce(new Error('not found'))
 
       const ignore = new VIgnoreFile(
         '.ignore',

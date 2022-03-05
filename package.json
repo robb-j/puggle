@@ -2,7 +2,7 @@
   "name": "puggle",
   "version": "0.6.1",
   "description": "A CLI for bootstrapping and keeping project config up-to-date",
-  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "robb-j/puggle",
   "author": "Rob Anderson (https://r0b.io)",
@@ -10,11 +10,11 @@
   "scripts": {
     "build": "tsc",
     "lint": "npx tsc --noEmit",
-    "test": "jest",
-    "coverage": "jest --coverage",
+    "test": "NO_COLOR=true jest",
+    "coverage": "NO_COLOR=true jest --coverage",
     "preversion": "npm test -s && npm run readme-toc && npm run build && git add README.md",
     "readme-toc": "md-toc -i",
-    "prettier": "prettier --write '**/*.{js,ts,tsx,json,css,md}'",
+    "format": "prettier --write '**/*.{js,ts,tsx,json,css,md}'",
     "start": "node dist/cli.js",
     "dev": "NODE_ENV=development node -r ts-node/register src/cli.ts"
   },
@@ -29,45 +29,43 @@
     "node": ">=12"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
-    "fs-extra": "^9.1.0",
-    "glob": "^7.1.6",
+    "fs-extra": "^10.0.1",
+    "glob": "^7.2.0",
     "got": "^9.6.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
-    "prompts": "^2.3.2",
-    "semver": "^7.3.2",
-    "yaml": "^1.10.0",
-    "yargs": "^13.2.4"
+    "picocolors": "^1.0.0",
+    "prompts": "^2.4.2",
+    "semver": "^7.3.5",
+    "yaml": "^1.10.2",
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
-    "@robb_j/md-toc": "^0.3.1",
-    "@types/fs-extra": "^9.0.11",
-    "@types/glob": "^7.1.3",
-    "@types/got": "^9.6.11",
-    "@types/jest": "^26.0.14",
+    "@robb_j/md-toc": "^0.3.3",
+    "@types/fs-extra": "^9.0.13",
+    "@types/glob": "^7.2.0",
+    "@types/got": "^9.6.12",
+    "@types/jest": "^27.4.1",
     "@types/lodash.clone": "^4.5.6",
     "@types/lodash.clonedeep": "^4.5.6",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.set": "^4.3.6",
-    "@types/node": "^14.11.2",
-    "@types/prompts": "^2.0.13",
-    "@types/semver": "^7.3.4",
+    "@types/node": "^16.11.26",
+    "@types/prompts": "^2.0.14",
+    "@types/semver": "^7.3.9",
     "@types/yaml": "^1.9.7",
-    "@types/yargs": "^15.0.7",
-    "coveralls": "^3.1.0",
-    "husky": "^4.3.0",
-    "jest": "^27.0.6",
-    "lint-staged": "^10.4.0",
-    "nock": "^13.0.4",
-    "prettier": "^2.1.2",
-    "strip-ansi": "^6.0.0",
-    "ts-jest": "^27.0.3",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.0.3"
+    "@types/yargs": "^17.0.9",
+    "coveralls": "^3.1.1",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.5",
+    "nock": "^13.2.4",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.6.2",
+    "yorkie": "^2.0.0"
   },
   "peerDependencies": {
     "@types/prompts": "^2.0.9"
@@ -77,10 +75,8 @@
       "optional": true
     }
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,ts,tsx,json,css,md}": [

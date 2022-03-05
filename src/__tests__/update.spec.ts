@@ -5,7 +5,6 @@
 import { testPreset } from '../utils/mock-preset'
 import { puggle, makeConfig } from '../puggle'
 import { readFileSync, readFile, writeFile } from 'fs-extra'
-import { mocked } from 'ts-jest/utils'
 import yaml from 'yaml'
 import { trimInlineTemplate } from '../utils'
 import prompts from 'prompts'
@@ -58,14 +57,16 @@ describe('puggle update', () => {
   beforeEach(() => {
     prompts.inject([true])
 
-    mocked(readFileSync).mockImplementation((path) =>
-      mockedFiles.get(path as any)
-    )
-    mocked(readFile).mockImplementation((path) => mockedFiles.get(path as any))
+    jest
+      .mocked(readFileSync)
+      .mockImplementation((path) => mockedFiles.get(path as any))
+    jest
+      .mocked(readFile)
+      .mockImplementation((path) => mockedFiles.get(path as any))
   })
 
   afterEach(() => {
-    mocked(readFile).mockReset()
+    jest.mocked(readFile).mockReset()
   })
 
   it('should merge persited files', async () => {
